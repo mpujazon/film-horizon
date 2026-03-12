@@ -1,7 +1,7 @@
-# Agents Guide - Movies (Angular 21)
+# Agents Guide - FilmHorizon (Angular 21)
 
 This document defines how human and AI contributors should collaborate on the Movies project.
-It is aligned with the analysis in `docs/Project Analysis Starter - Movies.md`.
+It is aligned with the analysis in `docs/Project Analysis Starter - FilmHorizon.md`.
 
 ## 1) Product North Star
 
