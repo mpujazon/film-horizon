@@ -1,2 +1,6 @@
-<app-navbar/>
-<router-outlet/>
+<div className="min-h-screen bg-background text-foreground flex flex-col font-sans selection:bg-primary/50">
+  <app-navbar/>
+  <main className="flex-grow">
+    <router-outlet/>
+  </main>
+</div>
