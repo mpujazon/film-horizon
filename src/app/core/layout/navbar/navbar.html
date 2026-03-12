@@ -41,14 +41,67 @@
         <button type="button" class="text-foreground hover:text-primary hover:cursor-pointer transition-colors font-medium ml-2 hidden sm:block">
           Sign In
         </button>
-        <button type="button" class="md:hidden text-foreground p-2" aria-label="Open menu">
-          <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <line x1="4" x2="20" y1="12" y2="12"></line>
-            <line x1="4" x2="20" y1="6" y2="6"></line>
-            <line x1="4" x2="20" y1="18" y2="18"></line>
-          </svg>
+        <button
+          type="button"
+          class="md:hidden text-foreground p-2"
+          [attr.aria-label]="isMobileMenuOpen() ? 'Close menu' : 'Open menu'"
+          [attr.aria-expanded]="isMobileMenuOpen()"
+          aria-controls="mobile-nav-menu"
+          (click)="toggleMobileMenu()"
+        >
+          @if (isMobileMenuOpen()) {
+            <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <line x1="18" x2="6" y1="6" y2="18"></line>
+              <line x1="6" x2="18" y1="6" y2="18"></line>
+            </svg>
+          } @else {
+            <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <line x1="4" x2="20" y1="12" y2="12"></line>
+              <line x1="4" x2="20" y1="6" y2="6"></line>
+              <line x1="4" x2="20" y1="18" y2="18"></line>
+            </svg>
+          }
         </button>
       </div>
     </div>
+
+    <div class="md:hidden pb-3">
+      <div class="flex items-center bg-card border border-border rounded-full px-3 py-2 focus-within:ring-2 focus-within:ring-primary/50 transition-all">
+        <svg class="w-4 h-4 text-muted-foreground mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="11" cy="11" r="8"></circle>
+          <path d="m21 21-4.3-4.3"></path>
+        </svg>
+        <input
+          type="text"
+          placeholder="Search FilmHorizon"
+          class="bg-transparent text-sm text-foreground outline-none placeholder:text-muted-foreground w-full"
+        />
+      </div>
+    </div>
+
+    @if (isMobileMenuOpen()) {
+      <div id="mobile-nav-menu" class="md:hidden border-t border-border/40 py-3">
+        <div class="flex flex-col gap-1">
+          @for (link of links; track link.id) {
+            <a
+              [routerLink]="link.path"
+              class="px-2 py-2 rounded text-foreground hover:text-primary hover:bg-card/70 transition-colors font-medium"
+              routerLinkActive="text-primary bg-card"
+              [routerLinkActiveOptions]="{ exact:true }"
+              (click)="closeMobileMenu()"
+            >
+              {{link.label}}
+            </a>
+          }
+          <button
+            type="button"
+            class="text-left px-2 py-2 rounded text-foreground hover:text-primary hover:bg-card/70 transition-colors font-medium sm:hidden"
+            (click)="closeMobileMenu()"
+          >
+            Sign In
+          </button>
+        </div>
+      </div>
+    }
   </div>
 </nav>

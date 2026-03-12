@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import {RouterLink, RouterLinkActive} from '@angular/router';
 
 @Component({
@@ -11,6 +11,8 @@ import {RouterLink, RouterLinkActive} from '@angular/router';
 })
 export class Navbar {
   appName = 'FilmHorizon';
+  isMobileMenuOpen = signal(false);
+
   links = [
     {
       id:1,
@@ -28,4 +30,12 @@ export class Navbar {
       path:'/tv-shows'
     }
   ];
+
+  toggleMobileMenu(): void {
+    this.isMobileMenuOpen.update((open) => !open);
+  }
+
+  closeMobileMenu(): void {
+    this.isMobileMenuOpen.set(false);
+  }
 }
