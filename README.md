@@ -1,59 +1,110 @@
-# FilmHorizon
+# FilmAtlas
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.1.1.
+FilmAtlas is a private movie-tracking SPA where users can discover movies and manage personal favorites and ratings.
 
-## Development server
+## Context
 
-To start a local development server, run:
+Users need a simple, visual, and persistent way to save movie preferences. This project focuses on fast task completion:
+
+- Search and explore movies.
+- Open detailed movie, actor, and director views.
+- Sign in and persist favorites and ratings (1-10).
+
+## MVP Scope
+
+### In scope (v1)
+
+- Movie exploration with search and filters.
+- Movie detail page (synopsis, cast, director, release date, trailer if available).
+- Actor and director detail pages.
+- User authentication (register/login).
+- Favorites management and personal ratings.
+- Protected user areas (`/favorites`, `/profile`).
+
+### Out of scope (v1)
+
+- Social sharing.
+- Public comments/reviews.
+- Advanced recommendation engine.
+
+## Tech Stack
+
+- Angular 21 (standalone-first architecture).
+- Tailwind CSS (mobile-first, accessible UI, chosen to accelerate delivery).
+- TMDB API for movie/person/credits data.
+- Firebase for authentication and user-specific persistence.
+- Vercel for deployment.
+
+## Route Map (v1)
+
+- Public: `/`, `/explore`, `/movie/:id`, `/actor/:id`, `/director/:id`, `/login`, `/register`
+- Auth-only: `/favorites`, `/profile`
+- Fallback: `*` -> 404
+
+## Non-Functional Targets
+
+- Performance: fast interactive experience on mid-range mobile.
+- Accessibility: WCAG 2.2 AA-oriented checks on core flows.
+- Security: favorites/ratings are private per authenticated user.
+- Maintainability: feature-based architecture and testable modules.
+
+## Quick Start
+
+### Prerequisites
+
+- Node.js LTS
+- Angular CLI 21+
+
+### Install and run
 
 ```bash
+npm install
 ng serve
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+Open `http://localhost:4200/`.
 
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+## Scripts
 
 ```bash
-ng generate component component-name
+ng serve      # start development server
+ng build      # production build
+ng test       # run unit tests
+ng e2e        # run end-to-end tests (when configured)
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+## Quality and Testing Strategy
 
-```bash
-ng generate --help
-```
+- Unit tests for core logic (filters, mappers, auth helpers).
+- Component tests for explore, detail, and favorite/rating flows.
+- E2E happy paths:
+  - Search -> detail
+  - Register/login
+  - Add/remove favorite and rate
+- Gherkin scenarios aligned with acceptance criteria.
 
-## Building
+## Risks and Mitigation
 
-To build the project run:
+- TMDB limits/data gaps: caching, retries, and robust empty/error states.
+- Scope creep: freeze v1 scope and push extras to backlog.
+- Auth complexity: validate integration early.
+- Accessibility debt: include a11y checks during implementation, not at the end.
 
-```bash
-ng build
-```
+## Delivery Plan
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+- Sprint 1: project setup, routing, base layout, TMDB spike.
+- Sprint 2: exploration + filtering + movie detail.
+- Sprint 3: actor/director details + auth.
+- Sprint 4: favorites + ratings + persistence.
+- Sprint 5: testing, accessibility/performance pass, deployment.
 
-## Running unit tests
+## Definition of Done
 
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+A feature is complete only when:
 
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+- Acceptance criteria pass.
+- Relevant tests are implemented and passing.
+- Loading, error, and empty states are present.
+- Accessibility checks are completed for affected flows.
+- Code is reviewed and documented.
+- Feature is deployed and smoke-tested.
