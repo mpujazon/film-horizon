@@ -16,9 +16,14 @@ describe('FeaturedCarousel', () => {
 
     fixture = TestBed.createComponent(FeaturedCarousel);
     component = fixture.componentInstance;
-    fixture.componentRef.setInput('title', 'The Last Horizon');
-    fixture.componentRef.setInput('description', 'A pilot chases a signal beyond known space.');
-    fixture.componentRef.setInput('imageUrl', 'https://image.tmdb.org/t/p/original/backdrop.jpg');
+    fixture.componentRef.setInput('movies', [
+      {
+        title: 'The Last Horizon',
+        description: 'A pilot chases a signal beyond known space.',
+        imageUrl: 'https://image.tmdb.org/t/p/original/backdrop.jpg',
+        movieId: 1
+      }
+    ]);
     fixture.detectChanges();
   });
 

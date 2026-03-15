@@ -1,52 +1,130 @@
-<section class="relative mt-16 h-[65vh] w-full group" aria-label="Featured movie">
-  <div class="absolute inset-0">
-    <img
-      [ngSrc]="imageUrl()"
-      [alt]="title()"
-      fill
-      priority
-      class="h-full w-full object-cover"
-    />
-    <div class="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent"></div>
-    <div class="absolute inset-0 bg-gradient-to-r from-background via-background/40 to-transparent"></div>
-  </div>
-
-  <div class="absolute bottom-0 left-0 right-0 flex h-full flex-col justify-end p-8 md:p-16">
-    <div class="mb-4 flex items-center gap-3">
-      <span class="rounded bg-primary px-2 py-1 text-xs font-bold text-primary-foreground">TRAILER</span>
-      <span class="text-sm font-medium text-muted-foreground">Out Now</span>
+<section
+  class="group relative mt-28 h-[65vh] w-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 sm:mt-24 md:mt-16"
+  aria-label="Featured movie carousel"
+  tabindex="0"
+  (keydown)="onCarouselKeydown($event)"
+>
+  @if (currentMovie(); as movie) {
+    <div class="absolute inset-0">
+      <img
+        [ngSrc]="movie.imageUrl"
+        [alt]="movie.title"
+        fill
+        priority
+        class="h-full w-full object-cover"
+      />
+      <div class="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-transparent"></div>
+      <div class="absolute inset-0 bg-gradient-to-r from-background via-background/40 to-transparent"></div>
     </div>
 
-    <h1 class="mb-4 max-w-2xl text-4xl font-bold text-foreground drop-shadow-lg md:text-5xl">
-      {{ title() }}
-    </h1>
-    <p class="mb-8 line-clamp-3 max-w-xl text-lg text-foreground/80 drop-shadow-md md:text-xl">
-      {{ description() }}
-    </p>
+    <div class="absolute bottom-0 left-0 right-0 flex h-full flex-col justify-end p-8 md:p-16">
+      <div class="mb-4 flex items-center gap-3">
+        <span class="rounded bg-primary px-2 py-1 text-xs font-bold text-primary-foreground">TRAILER</span>
+        <span class="text-sm font-medium text-muted-foreground">Out Now</span>
+      </div>
 
-    <div class="flex items-center gap-4">
-      <a
-        [routerLink]="movieDetailLink()"
-        class="flex items-center justify-center gap-2 rounded-md bg-primary px-6 py-3 font-medium text-primary-foreground shadow-lg shadow-primary/20 transition-colors hover:bg-primary/90"
+      <h1 class="mb-4 max-w-2xl text-4xl font-bold text-foreground drop-shadow-lg md:text-5xl">
+        {{ movie.title }}
+      </h1>
+      <p class="mb-8 line-clamp-3 max-w-xl text-lg text-foreground/80 drop-shadow-md md:text-xl">
+        {{ movie.description }}
+      </p>
+
+      <div class="flex items-center gap-4">
+        <a
+          [routerLink]="movieDetailLink()"
+          class="flex items-center justify-center gap-2 rounded-md bg-primary px-6 py-3 font-medium text-primary-foreground shadow-lg shadow-primary/20 transition-colors hover:bg-primary/90"
+        >
+          <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polygon points="10 8 16 12 10 16 10 8"></polygon>
+          </svg>
+          Open Detail
+        </a>
+
+        <button
+          type="button"
+          class="flex items-center justify-center gap-2 rounded-md bg-secondary/80 px-6 py-3 font-medium text-foreground transition-colors hover:bg-secondary"
+          (click)="onAddToWatchlist()"
+        >
+          <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 5v14"></path>
+            <path d="M5 12h14"></path>
+          </svg>
+          Add to Watchlist
+        </button>
+      </div>
+
+      <div class="mt-6 flex items-center gap-2">
+        @for (control of controls(); track control.index) {
+          <button
+            type="button"
+            class="h-2 rounded-full transition-all hover:bg-foreground/80"
+            [class.w-8]="isActiveStep(control.index)"
+            [class.w-2]="!isActiveStep(control.index)"
+            [class.bg-primary]="isActiveStep(control.index)"
+            [class.bg-foreground]="!isActiveStep(control.index)"
+            [class.opacity-50]="!isActiveStep(control.index)"
+            [attr.aria-label]="'Go to slide ' + (control.index + 1) + ': ' + control.title"
+            [attr.aria-current]="isActiveStep(control.index) ? 'true' : null"
+            (click)="goToStep(control.index)"
+          ></button>
+        }
+      </div>
+    </div>
+
+    <div class="absolute bottom-5 right-3 flex items-center gap-1.5 md:hidden">
+      <button
+        type="button"
+        class="rounded-full bg-background/65 p-1.5 text-foreground backdrop-blur transition-colors hover:bg-background/90"
+        aria-label="Previous featured movie"
+        (click)="previousStep()"
       >
-        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <polygon points="5 3 19 12 5 21 5 3"></polygon>
-          <circle cx="12" cy="12" r="10"></circle>
+        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="m15 18-6-6 6-6"></path>
         </svg>
-        Open Detail
-      </a>
+      </button>
 
       <button
         type="button"
-        class="flex items-center justify-center gap-2 rounded-md bg-secondary/80 px-6 py-3 font-medium text-foreground transition-colors hover:bg-secondary"
-        (click)="onAddToWatchlist()"
+        class="rounded-full bg-background/65 p-1.5 text-foreground backdrop-blur transition-colors hover:bg-background/90"
+        aria-label="Next featured movie"
+        (click)="nextStep()"
       >
-        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M12 5v14"></path>
-          <path d="M5 12h14"></path>
+        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="m9 18 6-6-6-6"></path>
         </svg>
-        Add to Watchlist
       </button>
     </div>
-  </div>
+
+    <div class="pointer-events-none absolute inset-y-0 left-0 right-0 hidden items-center justify-between px-8 md:flex">
+      <button
+        type="button"
+        class="pointer-events-auto rounded-full bg-background/65 p-2 text-foreground backdrop-blur transition-colors hover:bg-background/90"
+        aria-label="Previous featured movie"
+        (click)="previousStep()"
+      >
+        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="m15 18-6-6 6-6"></path>
+        </svg>
+      </button>
+
+      <button
+        type="button"
+        class="pointer-events-auto rounded-full bg-background/65 p-2 text-foreground backdrop-blur transition-colors hover:bg-background/90"
+        aria-label="Next featured movie"
+        (click)="nextStep()"
+      >
+        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="m9 18 6-6-6-6"></path>
+        </svg>
+      </button>
+    </div>
+  } @else {
+    <div class="absolute inset-0 grid place-items-center bg-card/40 px-6 text-center">
+      <p class="max-w-md text-sm text-muted-foreground md:text-base">
+        No featured movies available yet.
+      </p>
+    </div>
+  }
 </section>
