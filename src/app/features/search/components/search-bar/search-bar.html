@@ -1,0 +1,87 @@
+<div class="flex items-center bg-card border border-border rounded-full px-3 py-1.5 focus-within:ring-2 focus-within:ring-primary/50 transition-all">
+  <svg class="w-4 h-4 text-muted-foreground mr-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <circle cx="11" cy="11" r="8"></circle>
+    <path d="m21 21-4.3-4.3"></path>
+  </svg>
+
+  <input
+    type="text"
+    [formControl]="searchControl"
+    placeholder="Search movies and TV shows"
+    class="bg-transparent text-base md:text-sm text-foreground outline-none placeholder:text-muted-foreground w-full md:w-56"
+    aria-label="Search movies and TV shows"
+    [attr.aria-expanded]="showPanel()"
+    aria-controls="search-results-panel"
+    (focus)="openPanel()"
+    (keydown.enter)="submitSearch()"
+    (keydown.escape)="closePanel()"
+  />
+
+  @if (query().length > 0) {
+    <button
+      type="button"
+      class="text-muted-foreground hover:text-foreground transition-colors ml-2"
+      aria-label="Clear search"
+      (click)="clearSearch()"
+    >
+      <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+    </button>
+  }
+</div>
+
+@if (showPanel()) {
+  <div
+    id="search-results-panel"
+    class="absolute top-full mt-2 w-full bg-card border border-border rounded-xl shadow-lg overflow-hidden"
+  >
+    @if (isLoading()) {
+      <div class="px-4 py-3 text-sm text-muted-foreground">Searching...</div>
+    }
+
+    @if (hasError()) {
+      <div class="px-4 py-3 text-sm text-destructive">Something went wrong. Try again.</div>
+    }
+
+    @if (showNoResults()) {
+      <div class="px-4 py-3 text-sm text-muted-foreground">No results found.</div>
+    }
+
+    @if (hasResults()) {
+      <ul class="py-1 max-h-80 overflow-y-auto" role="listbox" aria-label="Search results">
+        @for (result of results(); track result.id) {
+          <li>
+            <button
+              type="button"
+              class="w-full text-left px-4 py-3 hover:bg-muted/50 transition-colors flex items-center gap-3"
+              (click)="selectResult(result)"
+            >
+              @if (getPosterUrl(result)) {
+                <img
+                  [src]="getPosterUrl(result)"
+                  [alt]="getResultTitle(result) + ' poster'"
+                  class="w-10 h-14 md:w-12 md:h-16 rounded object-cover border border-border/60 shrink-0"
+                  loading="lazy"
+                />
+              } @else {
+                <div class="w-10 h-14 md:w-12 md:h-16 rounded border border-border/60 bg-muted/40 shrink-0" aria-hidden="true"></div>
+              }
+
+              <div class="min-w-0">
+                <p class="text-sm text-foreground font-medium truncate">{{ getResultTitle(result) }}</p>
+                <p class="text-xs text-muted-foreground mt-0.5">
+                  {{ result.media_type === 'movie' ? 'Movie' : 'TV Show' }}
+                  @if (getReleaseDate(result)) {
+                    <span> - {{ getReleaseDate(result) | date: 'yyyy' }}</span>
+                  }
+                </p>
+              </div>
+            </button>
+          </li>
+        }
+      </ul>
+    }
+  </div>
+}

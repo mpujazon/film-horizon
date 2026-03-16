@@ -29,4 +29,24 @@ export class TmdbService {
         }))
       )
   }
+
+  searchMedia(query: string, page: number = 1): Observable<MediaListResponse> {
+    const params = new HttpParams()
+      .set('query', query)
+      .set('page', page)
+      .set('include_adult', false);
+
+    return this.http
+      .get<MediaListResponse>(
+        `${API_CONFIG.tmdbBaseUrl}/search/multi`,
+        { headers: this.headers, params }
+      ).pipe(
+        map((response) => ({
+          ...response,
+          results: response.results.filter(
+            (item) => item.media_type === 'movie' || item.media_type === 'tv'
+          )
+        }))
+      );
+  }
 }
