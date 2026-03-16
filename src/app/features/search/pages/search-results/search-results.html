@@ -1,0 +1,32 @@
+<section class="container mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-10">
+  <header class="mb-6">
+    <h1 class="text-2xl md:text-3xl font-bold tracking-tight text-foreground">Search results</h1>
+    @if (hasValidQuery()) {
+      <p class="mt-2 text-sm text-muted-foreground">Showing results for "{{ query() }}"</p>
+    }
+  </header>
+
+  @if (!hasValidQuery()) {
+    <p class="text-muted-foreground">Enter at least 2 characters in search.</p>
+  }
+
+  @if (isLoading()) {
+    <p class="text-muted-foreground">Loading results...</p>
+  }
+
+  @if (hasError()) {
+    <p class="text-destructive">We could not load results right now. Please try again.</p>
+  }
+
+  @if (hasValidQuery() && !isLoading() && !hasError() && !hasResults()) {
+    <p class="text-muted-foreground">No movies or TV shows found.</p>
+  }
+
+  @if (hasResults()) {
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
+      @for (item of results(); track item.id) {
+        <app-movie-card [movie]="item" />
+      }
+    </div>
+  }
+</section>

@@ -11,7 +11,18 @@ import {
 import { DatePipe } from '@angular/common';
 import { ReactiveFormsModule, FormControl } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { catchError, debounceTime, distinctUntilChanged, finalize, map, of, switchMap, tap } from 'rxjs';
+import {
+  catchError,
+  debounceTime,
+  distinctUntilChanged,
+  filter,
+  finalize,
+  map,
+  of,
+  switchMap,
+  tap
+} from 'rxjs';
+import { NavigationEnd, Router } from '@angular/router';
 import { TmdbService } from '../../../../core/services/tmdb-service';
 import { Media } from '../../../../shared/models/Media';
 import { API_CONFIG } from '../../../../core/config/api.config';
@@ -28,6 +39,7 @@ import { API_CONFIG } from '../../../../core/config/api.config';
 })
 export class SearchBar {
   private readonly tmdbService = inject(TmdbService);
+  private readonly router = inject(Router);
   private readonly destroyRef = inject(DestroyRef);
   private readonly elementRef = inject(ElementRef<HTMLElement>);
   private readonly minSearchLength = 2;
@@ -60,6 +72,7 @@ export class SearchBar {
 
   constructor() {
     this.bindSearchStream();
+    this.clearInputOnRouteChange();
   }
 
   openPanel(): void {
@@ -88,6 +101,19 @@ export class SearchBar {
     this.results.set([]);
     this.hasError.set(false);
     this.isLoading.set(false);
+    this.closePanel();
+  }
+
+  submitSearch(): void {
+    const query = this.searchControl.value.trim();
+
+    if (query.length < this.minSearchLength) {
+      return;
+    }
+
+    void this.router.navigate(['/search'], {
+      queryParams: { q: query }
+    });
     this.closePanel();
   }
 
@@ -150,6 +176,22 @@ export class SearchBar {
       .subscribe((results) => {
         this.results.set(results);
         this.isPanelOpen.set(this.query().length >= this.minSearchLength);
+      });
+  }
+
+  private clearInputOnRouteChange(): void {
+    this.router.events
+      .pipe(
+        filter((event): event is NavigationEnd => event instanceof NavigationEnd),
+        filter((event) => !event.urlAfterRedirects.startsWith('/search')),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe(() => {
+        if (!this.searchControl.value) {
+          return;
+        }
+
+        this.clearSearch();
       });
   }
 

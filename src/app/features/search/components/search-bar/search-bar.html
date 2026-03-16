@@ -13,6 +13,7 @@
     [attr.aria-expanded]="showPanel()"
     aria-controls="search-results-panel"
     (focus)="openPanel()"
+    (keydown.enter)="submitSearch()"
     (keydown.escape)="closePanel()"
   />
 
