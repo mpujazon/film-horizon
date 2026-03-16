@@ -5,12 +5,14 @@ import {TmdbService} from '../../../../core/services/tmdb-service';
 import {Observable, map} from 'rxjs';
 import {TrendingMoviesResponse} from '../../../../shared/models/PaginatedResponse';
 import {Movie} from '../../../../shared/models/Movie';
+import {MovieCard} from '../../../../shared/components/movie-card/movie-card';
 
 @Component({
   selector: 'app-homepage',
   imports: [
     AsyncPipe,
-    FeaturedCarousel
+    FeaturedCarousel,
+    MovieCard
   ],
   templateUrl: './homepage.html'
 })
@@ -19,5 +21,5 @@ export class Homepage{
 
   featuredMovies$: Observable<Movie[]> =
     this.tmdbService.getFeaturedMovies()
-      .pipe(map((response)=> response.results.slice(0,10)));
+      .pipe(map((response)=> response.results/*.slice(0,10)*/));
 }
