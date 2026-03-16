@@ -3,8 +3,7 @@ import {AsyncPipe} from '@angular/common';
 import { FeaturedCarousel } from '../../components/featured-carousel/featured-carousel';
 import {TmdbService} from '../../../../core/services/tmdb-service';
 import {Observable, map} from 'rxjs';
-import {Movie} from '../../../../shared/models/Movie';
-import {MovieCard} from '../../../../shared/components/movie-card/movie-card';
+import {Media} from '../../../../shared/models/Media';
 import {Explore} from '../../components/explore/explore';
 
 @Component({
@@ -12,7 +11,6 @@ import {Explore} from '../../components/explore/explore';
   imports: [
     AsyncPipe,
     FeaturedCarousel,
-    MovieCard,
     Explore
   ],
   templateUrl: './homepage.html'
@@ -20,7 +18,11 @@ import {Explore} from '../../components/explore/explore';
 export class Homepage{
   tmdbService = inject(TmdbService);
 
-  featuredMovies$: Observable<Movie[]> =
+  featuredMovies$: Observable<Media[]> =
     this.tmdbService.getFeaturedMovies()
       .pipe(map((response)=> response.results.slice(0,10)));
+
+  popularMovies$: Observable<Media[]> =
+    this.tmdbService.getPopularMovies()
+      .pipe(map((response) => response.results));
 }

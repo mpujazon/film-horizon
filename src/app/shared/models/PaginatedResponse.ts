@@ -1,4 +1,4 @@
-import {Movie} from './Movie';
+import {Media} from './Media';
 
 export interface PaginatedResponse<T> {
     page: number;
@@ -7,4 +7,4 @@ export interface PaginatedResponse<T> {
     total_results: number;
 }
 
-export type TrendingMoviesResponse = PaginatedResponse<Movie>;
+export type MediaListResponse = PaginatedResponse<Media>;

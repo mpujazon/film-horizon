@@ -11,7 +11,7 @@ import {
 import { NgOptimizedImage } from '@angular/common';
 import { Router } from '@angular/router';
 import { API_CONFIG } from '../../../core/config/api.config';
-import { Movie } from '../../models/Movie';
+import { Media } from '../../models/Media';
 
 @Component({
   selector: 'app-movie-card',
@@ -26,10 +26,10 @@ import { Movie } from '../../models/Movie';
 export class MovieCard {
   private readonly router = inject(Router);
 
-  readonly movie = input.required<Movie>();
+  readonly movie = input.required<Media>();
 
-  readonly trailerClicked = output<Movie>();
-  readonly favoriteClicked = output<Movie>();
+  readonly trailerClicked = output<Media>();
+  readonly favoriteClicked = output<Media>();
 
   readonly imageLoadFailed = signal(false);
 

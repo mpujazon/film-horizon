@@ -1,5 +1,5 @@
 import {Component, input} from '@angular/core';
-import {Movie} from '../../../../shared/models/Movie';
+import {Media} from '../../../../shared/models/Media';
 import {MovieCard} from '../../../../shared/components/movie-card/movie-card';
 
 @Component({
@@ -10,5 +10,5 @@ import {MovieCard} from '../../../../shared/components/movie-card/movie-card';
   templateUrl: './explore.html'
 })
 export class Explore {
-  movies = input.required<Movie[]>();
+  movies = input.required<Media[]>();
 }

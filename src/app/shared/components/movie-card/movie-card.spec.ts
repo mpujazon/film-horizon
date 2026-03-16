@@ -2,12 +2,12 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 
 import { MovieCard } from './movie-card';
-import { Movie } from '../../models/Movie';
+import { Media } from '../../models/Media';
 
 describe('MovieCard', () => {
   let component: MovieCard;
   let fixture: ComponentFixture<MovieCard>;
-  const movie: Movie = {
+  const movie: Media = {
     adult: false,
     backdrop_path: '/backdrop.jpg',
     id: 123,
