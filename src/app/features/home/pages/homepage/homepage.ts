@@ -21,4 +21,8 @@ export class Homepage{
   featuredMedia$: Observable<Media[]> =
     this.tmdbService.getTrendingMedia()
       .pipe(map((response)=> response.results.slice(0,10)));
+
+  exploreMedia$: Observable<Media[]> =
+    this.tmdbService.getTrendingMedia()
+      .pipe(map((response)=> response.results));
 }
