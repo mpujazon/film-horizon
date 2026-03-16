@@ -11,7 +11,7 @@ import {
 import { NgOptimizedImage } from '@angular/common';
 import { Router } from '@angular/router';
 import { API_CONFIG } from '../../../core/config/api.config';
-import { Movie } from '../../models/Movie';
+import { Media } from '../../models/Media';
 
 @Component({
   selector: 'app-movie-card',
@@ -26,21 +26,21 @@ import { Movie } from '../../models/Movie';
 export class MovieCard {
   private readonly router = inject(Router);
 
-  readonly movie = input.required<Movie>();
+  readonly movie = input.required<Media>();
 
-  readonly trailerClicked = output<Movie>();
-  readonly favoriteClicked = output<Movie>();
+  readonly trailerClicked = output<Media>();
+  readonly favoriteClicked = output<Media>();
 
   readonly imageLoadFailed = signal(false);
 
-  readonly title = computed(() => this.movie().title);
+  readonly title = computed(() => this.movie().title || this.movie().name);
   readonly movieDetailUrl = computed(() => `/movie/${this.movie().id}`);
   readonly formattedRating = computed(() => this.movie().vote_average.toFixed(1));
   readonly releaseYear = computed(() => {
-    const releaseDate = this.movie().release_date;
+    const releaseDate = this.movie().release_date || this.movie().first_air_date;
     return releaseDate ? releaseDate.split('-')[0] : 'TBA';
   });
-  readonly languageLabel = computed(() => this.movie().original_language.toUpperCase());
+  readonly mediaType = computed(() => this.movie().media_type.toUpperCase());
   readonly posterUrl = computed(() => {
     const posterPath = this.movie().poster_path;
     return posterPath === null ? '' : `${API_CONFIG.tmdbImageBaseUrl}/w780${posterPath}`;

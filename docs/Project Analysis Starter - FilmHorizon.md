@@ -11,7 +11,7 @@ Create a private web app where users can discover movies and manage their person
 Users do not have a simple, visual, and persistent way to track cinematic preferences, ratings, and favorite titles.
 
 **Target users:**
-- Movie enthusiasts and regular users who want a personal movie tracking space.
+- Media enthusiasts and regular users who want a personal movie tracking space.
 - Main usage on mobile and desktop.
 
 **Business goals (KPIs):**
@@ -47,8 +47,8 @@ Users do not have a simple, visual, and persistent way to track cinematic prefer
 ## 3) Scope Definition (v1)
 
 ### In Scope
-- Movie exploration list with search/filter.
-- Movie detail view.
+- Media exploration list with search/filter.
+- Media detail view.
 - Actor detail view.
 - Director detail view.
 - User signup/login.
@@ -98,7 +98,7 @@ Users do not have a simple, visual, and persistent way to track cinematic prefer
 **Goal:** Access personal movie features.  
 **Main flow:** Open auth form -> submit credentials -> authenticated session.
 
-#### UC-03 Save Favorite and Rate Movie
+#### UC-03 Save Favorite and Rate Media
 **Actor:** Authenticated user  
 **Goal:** Persist personal preference for a movie.  
 **Main flow:** Open movie detail -> mark favorite -> set rating -> save.

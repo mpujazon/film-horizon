@@ -117,7 +117,7 @@ It is aligned with the analysis in `docs/Project Analysis Starter - FilmHorizon.
 Core feature contract:
 
 - Explore must support title search/filter.
-- Movie detail must show key metadata, cast, director, and trailer if available.
+- Media detail must show key metadata, cast, director, and trailer if available.
 - Authenticated users can add/remove favorites and set rating (1-10).
 - Favorites view allows edit/remove actions with persistent updates.
 
