@@ -11,7 +11,8 @@ import {
 } from '@angular/core';
 import { NgOptimizedImage } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import {FeaturedContent} from '../../../../shared/models/FeaturedContent';
+import {API_CONFIG} from '../../../../core/config/api.config';
+import {Movie} from '../../../../shared/models/Movie';
 
 @Component({
   selector: 'app-featured-carousel',
@@ -20,7 +21,7 @@ import {FeaturedContent} from '../../../../shared/models/FeaturedContent';
   templateUrl: './featured-carousel.html'
 })
 export class FeaturedCarousel {
-  readonly movies = input<readonly FeaturedContent[]>([]);
+  readonly movies = input<readonly Movie[]>([]);
   readonly autoplay = input<boolean>(true);
   readonly autoplayIntervalMs = input<number>(7000);
 
@@ -141,4 +142,6 @@ export class FeaturedCarousel {
     clearInterval(this.autoplayTimer);
     this.autoplayTimer = null;
   }
+
+  protected readonly API_CONFIG = API_CONFIG;
 }

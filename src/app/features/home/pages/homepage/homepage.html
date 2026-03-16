@@ -1,1 +1,1 @@
-<app-featured-carousel [movies]="featuredMovies" />
+<app-featured-carousel [movies]="(featuredMovies$ | async) ?? []"/>
