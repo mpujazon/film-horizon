@@ -19,12 +19,12 @@
 
     <div class="absolute bottom-0 left-0 right-0 flex h-full flex-col justify-end p-8 md:p-16">
       <div class="mb-4 flex items-center gap-3">
-        <span class="rounded bg-primary px-2 py-1 text-xs font-bold text-primary-foreground">TRAILER</span>
+        <span class="rounded bg-primary px-2 py-1 text-xs font-bold text-primary-foreground">{{movie.media_type.toUpperCase()}}</span>
         <span class="text-sm font-medium text-muted-foreground">Out Now</span>
       </div>
 
       <h1 class="mb-4 max-w-2xl text-4xl font-bold text-foreground drop-shadow-lg md:text-5xl">
-        {{ movie.title }}
+        {{ movie.title || movie.name}}
       </h1>
       <p class="mb-8 line-clamp-3 max-w-xl text-lg text-foreground/80 drop-shadow-md md:text-xl">
         {{ movie.overview }}

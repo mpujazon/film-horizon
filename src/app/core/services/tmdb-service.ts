@@ -10,16 +10,8 @@ import {MediaListResponse} from '../../shared/models/PaginatedResponse';
 export class TmdbService {
   private http = inject(HttpClient);
 
-  getFeaturedMovies(): Observable<MediaListResponse>{
-    return this.http.get<MediaListResponse>(`${API_CONFIG.tmdbBaseUrl}/trending/all/w`, {
-      headers: {
-        Authorization: `Bearer ${API_CONFIG.tmdbApiKey}`
-      }
-    });
-  }
-
-  getPopularMovies(): Observable<MediaListResponse>{
-    return this.http.get<MediaListResponse>(`${API_CONFIG.tmdbBaseUrl}/movie/popular`, {
+  getTrendingMedia(): Observable<MediaListResponse>{
+    return this.http.get<MediaListResponse>(`${API_CONFIG.tmdbBaseUrl}/trending/all/week`, {
       headers: {
         Authorization: `Bearer ${API_CONFIG.tmdbApiKey}`
       }
