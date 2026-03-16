@@ -5,13 +5,15 @@ import {TmdbService} from '../../../../core/services/tmdb-service';
 import {Observable, map} from 'rxjs';
 import {Movie} from '../../../../shared/models/Movie';
 import {MovieCard} from '../../../../shared/components/movie-card/movie-card';
+import {Explore} from '../../components/explore/explore';
 
 @Component({
   selector: 'app-homepage',
   imports: [
     AsyncPipe,
     FeaturedCarousel,
-    MovieCard
+    MovieCard,
+    Explore
   ],
   templateUrl: './homepage.html'
 })
