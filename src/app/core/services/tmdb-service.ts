@@ -19,7 +19,7 @@ export class TmdbService {
     return this.http
       .get<MediaListResponse>(
         `${API_CONFIG.tmdbBaseUrl}/trending/all/week`,
-        {headers: this.headers}
+        {headers: this.headers, params}
       ).pipe(
         map(response => ({
           ...response,
