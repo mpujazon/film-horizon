@@ -1,5 +1,9 @@
 <section class="mx-auto mt-8 grid w-full max-w-7xl grid-cols-2 gap-4 px-4 pb-10 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
-  @for (movie of movies(); track movie.id) {
+  @for (movie of items(); track movie.id) {
     <app-movie-card [movie]="movie"/>
   }
 </section>
+
+@if (loading()) {
+  <p class="pb-8 text-center text-sm text-zinc-300">Loading more movies...</p>
+}
