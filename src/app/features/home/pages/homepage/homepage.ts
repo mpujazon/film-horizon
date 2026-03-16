@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import { FeaturedCarousel } from '../../components/featured-carousel/featured-carousel';
-import {FeaturedContent} from '../../../../shared/models/FeaturedMovie';
+import {FeaturedContent} from '../../../../shared/models/FeaturedContent';
+import {TmdbService} from '../../../../core/services/tmdb-service';
 
 @Component({
   selector: 'app-homepage',
@@ -9,7 +10,12 @@ import {FeaturedContent} from '../../../../shared/models/FeaturedMovie';
   ],
   templateUrl: './homepage.html'
 })
-export class Homepage {
+export class Homepage implements OnInit{
+  tmdbService = inject(TmdbService);
+  ngOnInit() {
+    const object = this.tmdbService.getFeaturedMovies();
+  }
+
   protected readonly featuredMovies: readonly FeaturedContent[] = [
     {
       title: 'Dune: Part Two',

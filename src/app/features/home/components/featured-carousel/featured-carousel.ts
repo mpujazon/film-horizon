@@ -11,7 +11,7 @@ import {
 } from '@angular/core';
 import { NgOptimizedImage } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import {FeaturedContent} from '../../../../shared/models/FeaturedMovie';
+import {FeaturedContent} from '../../../../shared/models/FeaturedContent';
 
 @Component({
   selector: 'app-featured-carousel',
