@@ -7,7 +7,7 @@
   @if (currentMovie(); as movie) {
     <div class="absolute inset-0">
       <img
-        [ngSrc]="`${API_CONFIG.tmdbImageBaseUrl}/w1280${movie.backdrop_path ?? movie.poster_path ?? ''}`";
+        [ngSrc]="`${API_CONFIG.tmdbImageBaseUrl}/w1280${movie.backdrop_path ?? movie.poster_path ?? ''}`"
         [alt]="movie.title"
         fill
         priority

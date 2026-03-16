@@ -33,14 +33,14 @@ export class MovieCard {
 
   readonly imageLoadFailed = signal(false);
 
-  readonly title = computed(() => this.movie().title);
+  readonly title = computed(() => this.movie().title || this.movie().name);
   readonly movieDetailUrl = computed(() => `/movie/${this.movie().id}`);
   readonly formattedRating = computed(() => this.movie().vote_average.toFixed(1));
   readonly releaseYear = computed(() => {
-    const releaseDate = this.movie().release_date;
+    const releaseDate = this.movie().release_date || this.movie().first_air_date;
     return releaseDate ? releaseDate.split('-')[0] : 'TBA';
   });
-  readonly languageLabel = computed(() => this.movie().original_language.toUpperCase());
+  readonly mediaType = computed(() => this.movie().media_type.toUpperCase());
   readonly posterUrl = computed(() => {
     const posterPath = this.movie().poster_path;
     return posterPath === null ? '' : `${API_CONFIG.tmdbImageBaseUrl}/w780${posterPath}`;

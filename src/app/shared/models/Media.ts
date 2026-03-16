@@ -3,7 +3,6 @@ export interface Media {
   backdrop_path: string | null;
   id: number;
   title: string;
-  name?: string;
   original_language: string;
   original_title: string;
   overview: string;
@@ -15,4 +14,6 @@ export interface Media {
   video: boolean;
   vote_average: number;
   vote_count: number;
+  name?: string;
+  first_air_date?: string;
 }
