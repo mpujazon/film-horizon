@@ -7,7 +7,7 @@
   @if (currentMovie(); as movie) {
     <div class="absolute inset-0">
       <img
-        [ngSrc]="movie.imageUrl"
+        [ngSrc]="`${API_CONFIG.tmdbImageBaseUrl}/w1280${movie.backdrop_path ?? movie.poster_path ?? ''}`";
         [alt]="movie.title"
         fill
         priority
@@ -27,7 +27,7 @@
         {{ movie.title }}
       </h1>
       <p class="mb-8 line-clamp-3 max-w-xl text-lg text-foreground/80 drop-shadow-md md:text-xl">
-        {{ movie.description }}
+        {{ movie.overview }}
       </p>
 
       <div class="flex items-center gap-4">
