@@ -1,11 +1,13 @@
 import { Component, signal } from '@angular/core';
 import {RouterLink, RouterLinkActive} from '@angular/router';
+import {SearchBar} from '../../../features/search/components/search-bar/search-bar';
 
 @Component({
   selector: 'app-navbar',
   imports: [
     RouterLink,
-    RouterLinkActive
+    RouterLinkActive,
+    SearchBar
   ],
   templateUrl: './navbar.html'
 })
