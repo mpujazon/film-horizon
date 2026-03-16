@@ -51,7 +51,12 @@ export class FeaturedCarousel {
 
   protected readonly movieDetailLink = computed(() => {
     const movie = this.currentMovie();
-    return movie === null ? '/movie' : `/movie/${movie.id}`;
+    if (movie === null) {
+      return '/movie';
+    }
+
+    const mediaTypePath = movie.media_type === 'tv' ? 'tv' : 'movie';
+    return `/${mediaTypePath}/${movie.id}`;
   });
 
   protected readonly controls = computed(() =>

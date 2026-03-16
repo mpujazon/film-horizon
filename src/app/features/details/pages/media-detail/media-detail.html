@@ -1,0 +1,180 @@
+<section class="detail-shell relative overflow-hidden pt-32 pb-16 md:pt-24">
+  @if (hasMedia()) {
+    <article class="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 intro-reveal">
+      <header class="detail-hero relative overflow-hidden rounded-[2rem] border border-white/15 bg-black/55 p-6 md:p-10">
+        @if (backdropUrl(); as backdrop) {
+          <img
+            [ngSrc]="backdrop"
+            [alt]="title() + ' backdrop'"
+            fill
+            sizes="100vw"
+            priority
+            class="absolute inset-0 h-full w-full object-cover object-center"
+          />
+        }
+        <div class="absolute inset-0 bg-[linear-gradient(120deg,rgba(7,9,16,0.96)_25%,rgba(7,9,16,0.72)_54%,rgba(7,9,16,0.92)_100%)]"></div>
+        <div class="detail-noise absolute inset-0"></div>
+
+        <div class="relative z-10 grid gap-8 lg:grid-cols-[minmax(0,220px)_minmax(0,1fr)] lg:items-end">
+          <div class="relative mx-auto w-full max-w-[240px] lg:mx-0">
+            @if (posterUrl(); as poster) {
+              <img
+                [ngSrc]="poster"
+                [alt]="title() + ' poster'"
+                width="460"
+                height="690"
+                class="w-full rounded-2xl border border-white/20 shadow-[0_30px_70px_-30px_rgba(0,0,0,0.9)]"
+              />
+            } @else {
+              <div
+                class="grid aspect-[2/3] place-items-center rounded-2xl border border-white/25 bg-black/40 px-4 text-center text-sm text-white/75"
+              >
+                Poster unavailable
+              </div>
+            }
+          </div>
+
+          <div class="text-white intro-reveal intro-reveal-delay-1">
+            <div class="mb-4 flex flex-wrap items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em]">
+              <span class="rounded-full border border-amber-200/55 bg-amber-300/15 px-3 py-1">{{ mediaTypeLabel() }}</span>
+              <span class="rounded-full border border-white/30 bg-white/10 px-3 py-1">{{ releaseYear() }}</span>
+              <span class="rounded-full border border-white/30 bg-white/10 px-3 py-1">{{ runtimeLabel() }}</span>
+            </div>
+
+            <h1 class="text-balance font-[var(--font-display)] text-4xl leading-[1.05] md:text-6xl">
+              {{ title() }}
+            </h1>
+
+            @if (media()?.tagline) {
+              <p class="mt-3 max-w-2xl text-sm italic text-white/80 md:text-base">
+                {{ media()?.tagline }}
+              </p>
+            }
+
+            <div class="mt-6 grid gap-3 text-sm text-white/90 sm:grid-cols-3">
+              <p><span class="block text-xs uppercase tracking-[0.12em] text-white/60">Genres</span>{{ genresLabel() }}</p>
+              <p><span class="block text-xs uppercase tracking-[0.12em] text-white/60">Creative Lead</span>{{ directorLabel() }}</p>
+              <p><span class="block text-xs uppercase tracking-[0.12em] text-white/60">Status</span>{{ media()?.status }}</p>
+            </div>
+
+            <div class="mt-7 flex flex-wrap items-center gap-3">
+              @if (trailerUrl(); as trailer) {
+                <a
+                  [href]="trailer"
+                  target="_blank"
+                  rel="noreferrer"
+                  class="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-primary px-4 text-sm font-bold text-primary-foreground shadow-lg shadow-primary/30 transition-all hover:bg-primary/90 active:scale-95"
+                >
+                  <svg viewBox="0 0 24 24" class="h-4 w-4 fill-current" aria-hidden="true">
+                    <path d="M7 5.5V18.5L18 12L7 5.5Z" />
+                  </svg>
+                  Watch Trailer
+                </a>
+              }
+
+              <button
+                type="button"
+                class="inline-flex h-11 items-center justify-center gap-2 rounded-xl border border-white/15 bg-white/10 px-4 text-sm font-semibold text-white backdrop-blur-md transition-all hover:bg-white/20 active:scale-95"
+                [attr.aria-pressed]="isInWatchlist()"
+                [attr.aria-label]="isInWatchlist() ? 'Remove from watchlist' : 'Add to watchlist'"
+                (click)="toggleWatchlist()"
+              >
+                <svg viewBox="0 0 24 24" class="h-5 w-5" aria-hidden="true">
+                  @if (isInWatchlist()) {
+                    <path d="M20 6L9 17L4 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                  } @else {
+                    <path d="M12 5V19" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                    <path d="M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                  }
+                </svg>
+                {{ isInWatchlist() ? 'In Watchlist' : 'Add to Watchlist' }}
+              </button>
+
+              <a
+                routerLink="/"
+                class="inline-flex h-11 items-center justify-center rounded-xl border border-white/25 bg-black/30 px-4 text-sm font-semibold text-white transition hover:bg-white/10"
+              >
+                Back to Explore
+              </a>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <div class="mt-8 grid gap-6 lg:grid-cols-[minmax(0,1fr)_320px]">
+        <section class="detail-panel intro-reveal intro-reveal-delay-2 rounded-3xl border border-white/12 p-6 md:p-8">
+          <h2 class="font-[var(--font-display)] text-3xl text-white">Synopsis</h2>
+          <p class="mt-4 max-w-3xl text-base leading-8 text-white/82">
+            {{ overview() }}
+          </p>
+        </section>
+
+        <aside class="detail-panel intro-reveal intro-reveal-delay-3 rounded-3xl border border-white/12 p-6 text-white">
+          <h2 class="font-[var(--font-display)] text-2xl">Audience Pulse</h2>
+          <dl class="mt-4 space-y-4 text-sm">
+            <div class="flex items-baseline justify-between border-b border-white/10 pb-3">
+              <dt class="text-white/65">TMDB Rating</dt>
+              <dd class="text-xl font-semibold text-amber-200">{{ ratingLabel() }}/10</dd>
+            </div>
+            <div class="flex items-baseline justify-between border-b border-white/10 pb-3">
+              <dt class="text-white/65">Votes</dt>
+              <dd class="text-lg font-semibold">{{ voteCountLabel() }}</dd>
+            </div>
+            <div class="flex items-baseline justify-between">
+              <dt class="text-white/65">Media Type</dt>
+              <dd class="font-semibold">{{ mediaTypeLabel() }}</dd>
+            </div>
+          </dl>
+        </aside>
+      </div>
+
+      <section class="mt-8 intro-reveal intro-reveal-delay-3">
+        <h2 class="mb-4 font-[var(--font-display)] text-3xl text-white">Top Cast</h2>
+
+        @if (topCast().length > 0) {
+          <div class="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-8">
+            @for (castMember of topCast(); track castMember.id) {
+              <article class="cast-card rounded-2xl border border-white/10 bg-black/35 p-3 text-center text-white">
+                @if (getProfileUrl(castMember); as profileUrl) {
+                  <img
+                    [ngSrc]="profileUrl"
+                    [alt]="castMember.name"
+                    width="185"
+                    height="278"
+                    class="mx-auto aspect-[2/3] w-full rounded-xl object-cover"
+                  />
+                } @else {
+                  <div class="grid aspect-[2/3] place-items-center rounded-xl border border-white/15 bg-black/35 px-3 text-xs text-white/65">
+                    Image unavailable
+                  </div>
+                }
+
+                <h3 class="mt-3 text-sm font-semibold leading-tight">{{ castMember.name }}</h3>
+                <p class="mt-1 line-clamp-2 text-xs text-white/65">{{ castMember.character }}</p>
+              </article>
+            }
+          </div>
+        } @else {
+          <p class="rounded-2xl border border-white/12 bg-black/30 px-4 py-6 text-sm text-white/70">
+            Cast details are not available for this title.
+          </p>
+        }
+      </section>
+    </article>
+  } @else {
+    <div class="mx-auto max-w-2xl px-4 sm:px-6 lg:px-8">
+      <section class="rounded-3xl border border-white/10 bg-black/45 px-6 py-14 text-center text-white">
+        <h1 class="font-[var(--font-display)] text-4xl">Title not found</h1>
+        <p class="mt-3 text-sm text-white/75 md:text-base">
+          We could not load this media detail. The ID may be invalid or unavailable right now.
+        </p>
+        <a
+          routerLink="/"
+          class="mt-6 inline-flex items-center rounded-full border border-white/35 bg-white/10 px-5 py-2.5 text-sm font-semibold transition hover:bg-white/20 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+        >
+          Return Home
+        </a>
+      </section>
+    </div>
+  }
+</section>

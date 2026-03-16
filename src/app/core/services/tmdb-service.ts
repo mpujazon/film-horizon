@@ -3,6 +3,7 @@ import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {API_CONFIG} from '../config/api.config';
 import {Observable, map} from 'rxjs';
 import {MediaListResponse} from '../../shared/models/PaginatedResponse';
+import { MediaDetail, MediaType } from '../../shared/models/MediaDetail';
 
 @Injectable({
   providedIn: 'root',
@@ -46,6 +47,22 @@ export class TmdbService {
           results: response.results.filter(
             (item) => item.media_type === 'movie' || item.media_type === 'tv'
           )
+        }))
+      );
+  }
+
+  getMediaDetail(mediaType: MediaType, mediaId: number): Observable<MediaDetail> {
+    const params = new HttpParams().set('append_to_response', 'credits,videos');
+
+    return this.http
+      .get<MediaDetail>(
+        `${API_CONFIG.tmdbBaseUrl}/${mediaType}/${mediaId}`,
+        { headers: this.headers, params }
+      )
+      .pipe(
+        map((response) => ({
+          ...response,
+          media_type: mediaType
         }))
       );
   }
