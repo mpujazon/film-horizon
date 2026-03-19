@@ -1,0 +1,87 @@
+<nav class="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-md border-b border-border/40 shadow-sm">
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-16">
+      <div class="flex items-center gap-8">
+        <a routerLink="/" class="flex items-center gap-2">
+          <span class="bg-primary text-primary-foreground font-extrabold text-xl px-2.5 py-1 rounded tracking-tight">{{appName}}</span>
+        </a>
+
+        <div class="hidden md:flex items-center gap-6">
+          @for (link of links; track link.id) {
+            <a
+              [routerLink]="link.path" class="text-foreground hover:text-primary transition-colors font-medium"
+              routerLinkActive="text-muted-foreground hover:text-foreground"
+              [routerLinkActiveOptions]="{ exact:true }"
+            >
+              {{link.label}}
+            </a>
+          }
+        </div>
+      </div>
+
+      <div class="flex items-center gap-4">
+        <app-search-bar class="hidden md:block"/>
+
+        <button type="button" class="flex items-center gap-2 text-foreground hover:text-primary hover:cursor-pointer transition-colors font-medium ml-2">
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="m19 21-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+          </svg>
+          <span class="hidden lg:inline">Watchlist</span>
+        </button>
+        <button type="button" class="text-foreground hover:text-primary hover:cursor-pointer transition-colors font-medium ml-2 hidden sm:block">
+          Sign In
+        </button>
+        <button
+          type="button"
+          class="md:hidden text-foreground p-2"
+          [attr.aria-label]="isMobileMenuOpen() ? 'Close menu' : 'Open menu'"
+          [attr.aria-expanded]="isMobileMenuOpen()"
+          aria-controls="mobile-nav-menu"
+          (click)="toggleMobileMenu()"
+        >
+          @if (isMobileMenuOpen()) {
+            <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <line x1="18" x2="6" y1="6" y2="18"></line>
+              <line x1="6" x2="18" y1="6" y2="18"></line>
+            </svg>
+          } @else {
+            <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <line x1="4" x2="20" y1="12" y2="12"></line>
+              <line x1="4" x2="20" y1="6" y2="6"></line>
+              <line x1="4" x2="20" y1="18" y2="18"></line>
+            </svg>
+          }
+        </button>
+      </div>
+    </div>
+
+    <div class="md:hidden pb-3">
+      <app-search-bar class="md:hidden"/>
+    </div>
+
+    @if (isMobileMenuOpen()) {
+      <div id="mobile-nav-menu" class="md:hidden border-t border-border/40 py-3">
+        <div class="flex flex-col gap-1">
+          @for (link of links; track link.id) {
+            <a
+              [routerLink]="link.path"
+              class="px-2 py-2 rounded text-foreground hover:text-primary hover:bg-card/70 transition-colors font-medium"
+              routerLinkActive="text-primary bg-card"
+              [routerLinkActiveOptions]="{ exact:true }"
+              (click)="closeMobileMenu()"
+            >
+              {{link.label}}
+            </a>
+          }
+          <button
+            type="button"
+            class="text-left px-2 py-2 rounded text-foreground hover:text-primary hover:bg-card/70 transition-colors font-medium sm:hidden"
+            (click)="closeMobileMenu()"
+          >
+            Sign In
+          </button>
+        </div>
+      </div>
+    }
+  </div>
+</nav>

@@ -1,6 +1,6 @@
-# FilmAtlas
+# FilmHorizon
 
-FilmAtlas is a private movie-tracking SPA where users can discover movies and manage personal favorites and ratings.
+FilmHorizon is a private movie-tracking SPA where users can discover movies and manage personal favorites and ratings.
 
 ## Context
 
@@ -14,8 +14,8 @@ Users need a simple, visual, and persistent way to save movie preferences. This 
 
 ### In scope (v1)
 
-- Movie exploration with search and filters.
-- Movie detail page (synopsis, cast, director, release date, trailer if available).
+- Media exploration with search and filters.
+- Media detail page (synopsis, cast, director, release date, trailer if available).
 - Actor and director detail pages.
 - User authentication (register/login).
 - Favorites management and personal ratings.

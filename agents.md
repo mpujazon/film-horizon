@@ -1,7 +1,7 @@
-# Agents Guide - Movies (Angular 21)
+# Agents Guide - FilmHorizon (Angular 21)
 
 This document defines how human and AI contributors should collaborate on the Movies project.
-It is aligned with the analysis in `docs/Project Analysis Starter - Movies.md`.
+It is aligned with the analysis in `docs/Project Analysis Starter - FilmHorizon.md`.
 
 ## 1) Product North Star
 
@@ -117,7 +117,7 @@ It is aligned with the analysis in `docs/Project Analysis Starter - Movies.md`.
 Core feature contract:
 
 - Explore must support title search/filter.
-- Movie detail must show key metadata, cast, director, and trailer if available.
+- Media detail must show key metadata, cast, director, and trailer if available.
 - Authenticated users can add/remove favorites and set rating (1-10).
 - Favorites view allows edit/remove actions with persistent updates.
 
