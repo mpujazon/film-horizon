@@ -3,5 +3,5 @@ export type FeaturedContent = {
   description: string;
   imageUrl: string;
   id: number;
-  type: 'movie' | 'tv-show'
+  type: 'movie' | 'tv-show' | 'person'
 };

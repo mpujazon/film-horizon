@@ -1,6 +1,8 @@
 import { Routes } from '@angular/router';
 import {Homepage} from './features/home/pages/homepage/homepage';
 import { SearchResults } from './features/search/pages/search-results/search-results';
+import { MediaDetailPage } from './features/details/pages/media-detail/media-detail';
+import { mediaDetailResolver } from './features/details/resolvers/media-detail.resolver';
 
 export const routes: Routes = [
   {
@@ -10,6 +12,20 @@ export const routes: Routes = [
   {
     path: 'search',
     component: SearchResults
+  },
+  {
+    path: 'movie/:id',
+    component: MediaDetailPage,
+    resolve: {
+      media: mediaDetailResolver
+    }
+  },
+  {
+    path: 'tv/:id',
+    component: MediaDetailPage,
+    resolve: {
+      media: mediaDetailResolver
+    }
   },
   {
     path:"**",

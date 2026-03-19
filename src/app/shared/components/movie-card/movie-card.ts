@@ -34,7 +34,10 @@ export class MovieCard {
   readonly imageLoadFailed = signal(false);
 
   readonly title = computed(() => this.movie().title || this.movie().name);
-  readonly movieDetailUrl = computed(() => `/movie/${this.movie().id}`);
+  readonly movieDetailUrl = computed(() => {
+    const mediaTypePath = this.movie().media_type === 'tv' ? 'tv' : 'movie';
+    return `/${mediaTypePath}/${this.movie().id}`;
+  });
   readonly formattedRating = computed(() => this.movie().vote_average.toFixed(1));
   readonly releaseYear = computed(() => {
     const releaseDate = this.movie().release_date || this.movie().first_air_date;
