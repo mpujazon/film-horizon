@@ -48,14 +48,15 @@
       <div class="grid w-full min-w-0 grid-cols-[minmax(0,1fr)_2.5rem_auto] items-center gap-2.5 opacity-0 transition-opacity duration-500 delay-100 group-hover:opacity-100">
         <button
           type="button"
-          class="flex h-10 min-w-0 items-center justify-center gap-2 rounded-xl bg-primary px-3 text-sm font-bold text-primary-foreground shadow-lg shadow-primary/30 transition-all hover:bg-primary/90 active:scale-95"
+          class="flex h-10 min-w-0 items-center justify-center gap-2 rounded-xl bg-primary px-3 text-sm font-bold text-primary-foreground shadow-lg shadow-primary/30 transition-all hover:bg-primary/90 active:scale-95 disabled:cursor-not-allowed disabled:opacity-60"
           (click)="$event.stopPropagation(); onTrailerClick()"
           [attr.aria-label]="'Play trailer for ' + title()"
+          [disabled]="isTrailerLoading()"
         >
           <svg viewBox="0 0 24 24" class="h-4 w-4 fill-current" aria-hidden="true">
             <path d="M7 5.5V18.5L18 12L7 5.5Z" />
           </svg>
-          Trailer
+          {{ isTrailerLoading() ? 'Opening...' : 'Trailer' }}
         </button>
 
         <button
