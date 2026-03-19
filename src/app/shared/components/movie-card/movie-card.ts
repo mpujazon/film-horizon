@@ -10,8 +10,11 @@ import {
 } from '@angular/core';
 import { NgOptimizedImage } from '@angular/common';
 import { Router } from '@angular/router';
+import { catchError, finalize, map, of } from 'rxjs';
 import { API_CONFIG } from '../../../core/config/api.config';
+import { TmdbService } from '../../../core/services/tmdb-service';
 import { Media } from '../../models/Media';
+import { MediaVideo } from '../../models/MediaDetail';
 
 @Component({
   selector: 'app-movie-card',
@@ -25,13 +28,14 @@ import { Media } from '../../models/Media';
 })
 export class MovieCard {
   private readonly router = inject(Router);
+  private readonly tmdbService = inject(TmdbService);
 
   readonly movie = input.required<Media>();
 
-  readonly trailerClicked = output<Media>();
   readonly favoriteClicked = output<Media>();
 
   readonly imageLoadFailed = signal(false);
+  readonly isTrailerLoading = signal(false);
 
   readonly title = computed(() => this.movie().title || this.movie().name);
   readonly movieDetailUrl = computed(() => {
@@ -61,7 +65,29 @@ export class MovieCard {
   }
 
   onTrailerClick(): void {
-    this.trailerClicked.emit(this.movie());
+    if (this.isTrailerLoading()) {
+      return;
+    }
+
+    const movie = this.movie();
+    this.isTrailerLoading.set(true);
+
+    this.tmdbService
+      .getMediaDetail(movie.media_type, movie.id)
+      .pipe(
+        map((detail) => this.getTrailerUrl(detail.videos?.results ?? [])),
+        catchError(() => of(null)),
+        finalize(() => {
+          this.isTrailerLoading.set(false);
+        })
+      )
+      .subscribe((trailerUrl) => {
+        if (!trailerUrl || typeof window === 'undefined') {
+          return;
+        }
+
+        window.open(trailerUrl, '_blank', 'noopener,noreferrer');
+      });
   }
 
   onFavoriteClick(): void {
@@ -79,5 +105,14 @@ export class MovieCard {
 
     event.preventDefault();
     this.onCardClick();
+  }
+
+  private getTrailerUrl(videos: MediaVideo[]): string | null {
+    const trailer =
+      videos.find((video) => video.site === 'YouTube' && video.type === 'Trailer' && video.official) ??
+      videos.find((video) => video.site === 'YouTube' && video.type === 'Trailer') ??
+      null;
+
+    return trailer ? `https://www.youtube.com/watch?v=${trailer.key}` : null;
   }
 }
