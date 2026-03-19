@@ -121,6 +121,7 @@ export class SearchBar {
     this.searchControl.setValue(this.getResultTitle(result), { emitEvent: false });
     this.query.set(this.getResultTitle(result));
     this.isPanelOpen.set(false);
+    void this.router.navigate([`/${result.media_type}`, result.id]);
     this.resultSelected.emit(result);
   }
 
