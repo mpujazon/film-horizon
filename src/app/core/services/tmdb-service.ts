@@ -4,6 +4,7 @@ import {API_CONFIG} from '../config/api.config';
 import {Observable, map} from 'rxjs';
 import {MediaListResponse} from '../../shared/models/PaginatedResponse';
 import { MediaDetail, MediaType } from '../../shared/models/MediaDetail';
+import { ActorDetail } from '../../shared/models/ActorDetail';
 
 @Injectable({
   providedIn: 'root',
@@ -65,5 +66,14 @@ export class TmdbService {
           media_type: mediaType
         }))
       );
+  }
+
+  getActorDetail(actorId: number): Observable<ActorDetail> {
+    const params = new HttpParams().set('append_to_response', 'combined_credits');
+
+    return this.http.get<ActorDetail>(
+      `${API_CONFIG.tmdbBaseUrl}/person/${actorId}`,
+      { headers: this.headers, params }
+    );
   }
 }
