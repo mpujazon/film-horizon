@@ -5,37 +5,47 @@ import { MediaDetailPage } from './features/details/pages/media-detail/media-det
 import { mediaDetailResolver } from './features/details/resolvers/media-detail.resolver';
 import { ActorDetailPage } from './features/details/pages/actor-detail/actor-detail';
 import { actorDetailResolver } from './features/details/resolvers/actor-detail.resolver';
+import {Login} from './features/auth/pages/login/login';
+import {AuthGuard} from '@angular/fire/auth-guard';
 
 export const routes: Routes = [
   {
+    path:'login',
+    component: Login
+  },
+  {
     path:"",
-    component: Homepage
+    canActivateChild: [AuthGuard],
+    component: Homepage,
+    children: [
+      {
+        path: 'search',
+        component: SearchResults
+      },
+      {
+        path: 'movie/:id',
+        component: MediaDetailPage,
+        resolve: {
+          media: mediaDetailResolver
+        }
+      },
+      {
+        path: 'tv/:id',
+        component: MediaDetailPage,
+        resolve: {
+          media: mediaDetailResolver
+        }
+      },
+      {
+        path: 'actor/:id',
+        component: ActorDetailPage,
+        resolve: {
+          actor: actorDetailResolver
+        }
+      }
+    ]
   },
-  {
-    path: 'search',
-    component: SearchResults
-  },
-  {
-    path: 'movie/:id',
-    component: MediaDetailPage,
-    resolve: {
-      media: mediaDetailResolver
-    }
-  },
-  {
-    path: 'tv/:id',
-    component: MediaDetailPage,
-    resolve: {
-      media: mediaDetailResolver
-    }
-  },
-  {
-    path: 'actor/:id',
-    component: ActorDetailPage,
-    resolve: {
-      actor: actorDetailResolver
-    }
-  },
+
   {
     path:"**",
     redirectTo:""
