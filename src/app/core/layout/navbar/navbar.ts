@@ -1,6 +1,7 @@
-import { Component, signal } from '@angular/core';
-import {RouterLink, RouterLinkActive} from '@angular/router';
+import {Component, inject, signal} from '@angular/core';
+import {Router, RouterLink, RouterLinkActive} from '@angular/router';
 import {SearchBar} from '../../../features/search/components/search-bar/search-bar';
+import {AuthService} from '../../services/auth/auth-service';
 
 @Component({
   selector: 'app-navbar',
@@ -12,6 +13,8 @@ import {SearchBar} from '../../../features/search/components/search-bar/search-b
   templateUrl: './navbar.html'
 })
 export class Navbar {
+  readonly authService = inject(AuthService);
+  private router = inject(Router);
   appName = 'FilmHorizon';
   isMobileMenuOpen = signal(false);
 
@@ -32,6 +35,11 @@ export class Navbar {
       path:'/tv-shows'
     }
   ];
+
+  onLogOut(){
+    this.authService.logout();
+    this.router.navigate(['/login']);
+  }
 
   toggleMobileMenu(): void {
     this.isMobileMenuOpen.update((open) => !open);

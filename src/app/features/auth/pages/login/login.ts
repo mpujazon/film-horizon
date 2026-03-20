@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { AuthService } from 'src/app/core/services/auth/auth-service';
 import {FormsModule} from '@angular/forms';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -11,6 +12,7 @@ import {FormsModule} from '@angular/forms';
 })
 export class Login {
   private readonly authService = inject(AuthService);
+  private readonly router = inject(Router);
 
   email = '';
   password = '';
@@ -18,7 +20,7 @@ export class Login {
   async onSubmit(){
     try{
       await this.authService.login(this.email, this.password);
-      console.log('Login correcto')
+      await this.router.navigate(['/']);
     }catch(error){
       console.error('Error on login', error);
     }

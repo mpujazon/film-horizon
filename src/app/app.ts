@@ -1,7 +1,8 @@
-import { Component, signal } from '@angular/core';
+import {Component, inject, signal} from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import {Navbar} from './core/layout/navbar/navbar';
 import {Footer} from './core/layout/footer/footer';
+import {AuthService} from './core/services/auth/auth-service';
 
 @Component({
   selector: 'app-root',
@@ -11,4 +12,5 @@ import {Footer} from './core/layout/footer/footer';
 })
 export class App {
   protected readonly title = signal('film-horizon');
+  readonly authService = inject(AuthService);
 }

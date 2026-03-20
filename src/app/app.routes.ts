@@ -6,7 +6,7 @@ import { mediaDetailResolver } from './features/details/resolvers/media-detail.r
 import { ActorDetailPage } from './features/details/pages/actor-detail/actor-detail';
 import { actorDetailResolver } from './features/details/resolvers/actor-detail.resolver';
 import {Login} from './features/auth/pages/login/login';
-import {AuthGuard} from '@angular/fire/auth-guard';
+import {authGuard} from './core/guards/auth-guard';
 
 export const routes: Routes = [
   {
@@ -15,7 +15,7 @@ export const routes: Routes = [
   },
   {
     path:"",
-    canActivateChild: [AuthGuard],
+    canActivate: [authGuard],
     component: Homepage,
     children: [
       {
@@ -42,12 +42,11 @@ export const routes: Routes = [
         resolve: {
           actor: actorDetailResolver
         }
+      },
+      {
+        path:"**",
+        redirectTo:""
       }
     ]
-  },
-
-  {
-    path:"**",
-    redirectTo:""
   }
 ];

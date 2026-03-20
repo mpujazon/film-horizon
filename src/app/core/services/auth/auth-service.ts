@@ -28,4 +28,3 @@ export class AuthService {
     return !!this.user();
   }
 }
-

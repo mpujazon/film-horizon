@@ -28,9 +28,11 @@
           </svg>
           <span class="hidden lg:inline">Watchlist</span>
         </button>
-        <button type="button" class="text-foreground hover:text-primary hover:cursor-pointer transition-colors font-medium ml-2 hidden sm:block">
-          Sign In
-        </button>
+        @if (authService.isAuthenticated()) {
+          <button (click)="onLogOut()" type="button" class="text-foreground hover:text-primary hover:cursor-pointer transition-colors font-medium ml-2 hidden sm:block">
+            Sign Out
+          </button>
+        }
         <button
           type="button"
           class="md:hidden text-foreground p-2"
