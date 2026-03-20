@@ -1,6 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { Auth, authState, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, User } from '@angular/fire/auth';
 import { Observable } from 'rxjs';
+import {toSignal} from '@angular/core/rxjs-interop';
 
 @Injectable({
   providedIn: 'root',
@@ -9,6 +10,7 @@ export class AuthService {
   private readonly auth: Auth = inject(Auth);
 
   readonly user$: Observable<User | null> = authState(this.auth);
+  readonly user = toSignal(this.user$, {initialValue: null})
 
   register(email: string, password: string){
     return createUserWithEmailAndPassword(this.auth, email, password);
@@ -21,4 +23,9 @@ export class AuthService {
   logout() {
     return signOut(this.auth);
   }
+
+  isAuthenticated(): boolean{
+    return !!this.user();
+  }
 }
+
