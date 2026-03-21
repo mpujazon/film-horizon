@@ -20,9 +20,12 @@ export const routes: Routes = [
   },
   {
     path:"",
-    canActivate: [authGuard],
-    component: Homepage,
+    canActivateChild: [authGuard],
     children: [
+      {
+        path: '',
+        component: Homepage
+      },
       {
         path: 'search',
         component: SearchResults
