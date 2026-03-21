@@ -25,6 +25,7 @@ export class Login {
   loginErrorMessage = signal('');
 
   async onSubmit(){
+    this.loginErrorMessage.set('');
     this.isSubmitting = true;
     try{
       const {email, password} = this.loginForm.getRawValue();
