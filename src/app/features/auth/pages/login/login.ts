@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import {Component, inject, signal} from '@angular/core';
 import { AuthService } from 'src/app/core/services/auth/auth-service';
 import {FormBuilder, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
 import {Router, RouterLink} from '@angular/router';
@@ -22,6 +22,7 @@ export class Login {
   });
 
   isSubmitting = false;
+  loginErrorMessage = signal('');
 
   async onSubmit(){
     this.isSubmitting = true;
@@ -30,7 +31,7 @@ export class Login {
       await this.authService.login(email,password);
       await this.router.navigate(['/']);
     }catch(error){
-      console.error('Error on login', error);
+      this.showLoginError(error as Error);
     }finally {
       this.isSubmitting = false;
     }
@@ -49,5 +50,11 @@ export class Login {
     if (c.errors['email']) return 'Email inalid';
     if (c.errors['minlength']) return `At least ${c.errors['minlength'].requiredLength} characters`;
     return 'Value not valid';
+  }
+
+  showLoginError(error: Error){
+    if(error.message.includes('auth/invalid-credential')){
+      this.loginErrorMessage.set('Invalid credential');
+    }
   }
 }
