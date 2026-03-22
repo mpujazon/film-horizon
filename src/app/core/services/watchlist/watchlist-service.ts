@@ -1,5 +1,5 @@
 import {inject, Injectable} from '@angular/core';
-import {doc, Firestore, setDoc, serverTimestamp, query, getDoc} from '@angular/fire/firestore';
+import {doc, Firestore, setDoc, serverTimestamp, query, getDoc, deleteDoc} from '@angular/fire/firestore';
 import {AuthService} from '../auth/auth-service';
 import {MediaType} from '../../../shared/models/UserData';
 
@@ -28,6 +28,18 @@ export class WatchlistService {
     }
   }
 
+  async deleteItem(tmdbId: number, mediaType: MediaType){
+    try{
+      const userId = this.auth.user()?.uid;
+      const documentId = `${userId}_${mediaType}_${tmdbId}`;
+      const ref = doc(this.firestore, this.collection, documentId);
+
+      await deleteDoc(ref);
+    }catch(error){
+      console.error('Error deleting item', error)
+    }
+  }
+
   async isItemInUserWatchlist(tmdbId: number, mediaType: MediaType){
     try{
       const userId = this.auth.user()?.uid;
@@ -37,7 +49,6 @@ export class WatchlistService {
       const snapshot = await getDoc(ref);
       return snapshot.exists();
     }catch(error){
-      console.error("Error getting item status on watchlist", error);
       return false;
     }
   }

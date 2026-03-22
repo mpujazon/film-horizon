@@ -77,7 +77,7 @@
                 class="inline-flex h-11 items-center justify-center gap-2 rounded-xl border border-white/15 bg-white/10 px-4 text-sm font-semibold text-white backdrop-blur-md transition-all hover:bg-white/20 active:scale-95"
                 [attr.aria-pressed]="isInWatchlist()"
                 [attr.aria-label]="isInWatchlist() ? 'Remove from watchlist' : 'Add to watchlist'"
-                (click)="isInWatchlist()? null : addToWatchlist()"
+                (click)="isInWatchlist()? deleteFromWatchlist() : addToWatchlist()"
               >
                 <svg viewBox="0 0 24 24" class="h-5 w-5" aria-hidden="true">
                   @if (isInWatchlist()) {

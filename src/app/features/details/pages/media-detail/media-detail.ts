@@ -150,7 +150,18 @@ export class MediaDetailPage {
     this.isInWatchlist.set(true);
   }
 
-  async getItemWatchlistStatus(){
+  protected async deleteFromWatchlist():Promise<void>{
+    const media = this.media();
+
+    if(!media){
+      return;
+    }
+
+    await this.watchlistService.deleteItem(media.id, media.media_type);
+    this.isInWatchlist.set(false);
+  }
+
+  protected async getItemWatchlistStatus(){
     const media = this.media();
 
     if(!media){
