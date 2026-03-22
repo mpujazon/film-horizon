@@ -15,11 +15,12 @@ import { API_CONFIG } from '../../../core/config/api.config';
 import { TmdbService } from '../../../core/services/tmdb/tmdb-service';
 import { Media } from '../../models/Media';
 import { MediaVideo } from '../../models/MediaDetail';
+import { TrailerModal } from '../trailer-modal/trailer-modal';
 import { WatchlistButton, WatchlistChangeEvent } from '../watchlist-button/watchlist-button';
 
 @Component({
   selector: 'app-movie-card',
-  imports: [NgOptimizedImage, WatchlistButton],
+  imports: [NgOptimizedImage, TrailerModal, WatchlistButton],
   templateUrl: './movie-card.html',
   styleUrl: './movie-card.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -36,6 +37,8 @@ export class MovieCard {
 
   readonly imageLoadFailed = signal(false);
   readonly isTrailerLoading = signal(false);
+  readonly isTrailerModalOpen = signal(false);
+  readonly trailerKey = signal<string | null>(null);
 
   readonly title = computed(() => this.movie().title || this.movie().name || 'Untitled');
   readonly movieDetailUrl = computed(() => {
@@ -75,19 +78,25 @@ export class MovieCard {
     this.tmdbService
       .getMediaDetail(movie.media_type, movie.id)
       .pipe(
-        map((detail) => this.getTrailerUrl(detail.videos?.results ?? [])),
+        map((detail) => this.getTrailerKey(detail.videos?.results ?? [])),
         catchError(() => of(null)),
         finalize(() => {
           this.isTrailerLoading.set(false);
         })
       )
-      .subscribe((trailerUrl) => {
-        if (!trailerUrl || typeof window === 'undefined') {
+      .subscribe((trailerKey) => {
+        if (!trailerKey) {
           return;
         }
 
-        window.open(trailerUrl, '_blank', 'noopener,noreferrer');
+        this.trailerKey.set(trailerKey);
+        this.isTrailerModalOpen.set(true);
       });
+  }
+
+  closeTrailerModal(): void {
+    this.isTrailerModalOpen.set(false);
+    this.trailerKey.set(null);
   }
 
   onCardClick(): void {
@@ -107,12 +116,12 @@ export class MovieCard {
     this.watchlistChanged.emit(event);
   }
 
-  private getTrailerUrl(videos: MediaVideo[]): string | null {
+  private getTrailerKey(videos: MediaVideo[]): string | null {
     const trailer =
       videos.find((video) => video.site === 'YouTube' && video.type === 'Trailer' && video.official) ??
       videos.find((video) => video.site === 'YouTube' && video.type === 'Trailer') ??
       null;
 
-    return trailer ? `https://www.youtube.com/watch?v=${trailer.key}` : null;
+    return trailer?.key ?? null;
   }
 }

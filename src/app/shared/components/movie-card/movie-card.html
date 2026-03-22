@@ -72,4 +72,11 @@
       </div>
     </div>
   </div>
+
+  <app-trailer-modal
+    [isOpen]="isTrailerModalOpen()"
+    [videoKey]="trailerKey()"
+    [title]="title()"
+    (closed)="closeTrailerModal()"
+  />
 </article>

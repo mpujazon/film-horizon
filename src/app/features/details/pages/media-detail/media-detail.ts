@@ -1,15 +1,16 @@
 import { NgOptimizedImage, ViewportScroller } from '@angular/common';
-import { ChangeDetectionStrategy, Component, computed, effect, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, inject, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { map } from 'rxjs';
 import { API_CONFIG } from '../../../../core/config/api.config';
 import { MediaCastMember, MediaCrewMember, MediaDetail } from '../../../../shared/models/MediaDetail';
+import { TrailerModal } from '../../../../shared/components/trailer-modal/trailer-modal';
 import { WatchlistButton } from '../../../../shared/components/watchlist-button/watchlist-button';
 
 @Component({
   selector: 'app-media-detail',
-  imports: [NgOptimizedImage, RouterLink, WatchlistButton],
+  imports: [NgOptimizedImage, RouterLink, TrailerModal, WatchlistButton],
   templateUrl: './media-detail.html',
   styleUrl: './media-detail.css',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -99,14 +100,15 @@ export class MediaDetailPage {
     () => this.media()?.overview || 'No synopsis is available for this title yet.'
   );
   protected readonly topCast = computed(() => (this.media()?.credits?.cast ?? []).slice(0, 8));
-  protected readonly trailerUrl = computed(() => {
+  protected readonly isTrailerModalOpen = signal(false);
+  protected readonly trailerKey = computed(() => {
     const videos = this.media()?.videos?.results ?? [];
     const trailer =
       videos.find((video) => video.site === 'YouTube' && video.type === 'Trailer' && video.official) ??
       videos.find((video) => video.site === 'YouTube' && video.type === 'Trailer') ??
       null;
 
-    return trailer ? `https://www.youtube.com/watch?v=${trailer.key}` : null;
+    return trailer?.key ?? null;
   });
   protected readonly backdropUrl = computed(() => {
     const backdropPath = this.media()?.backdrop_path;
@@ -127,6 +129,18 @@ export class MediaDetailPage {
 
   protected getProfileUrl(castMember: MediaCastMember): string {
     return castMember.profile_path ? `${this.imageBaseUrl}/w185${castMember.profile_path}` : '';
+  }
+
+  protected openTrailerModal(): void {
+    if (!this.trailerKey()) {
+      return;
+    }
+
+    this.isTrailerModalOpen.set(true);
+  }
+
+  protected closeTrailerModal(): void {
+    this.isTrailerModalOpen.set(false);
   }
 
   private findCrewByJob(crew: MediaCrewMember[], job: string): MediaCrewMember | null {
