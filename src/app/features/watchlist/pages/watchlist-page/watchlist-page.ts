@@ -6,6 +6,7 @@ import { WatchlistService } from '../../../../core/services/watchlist/watchlist-
 import { MovieCard } from '../../../../shared/components/movie-card/movie-card';
 import { Media } from '../../../../shared/models/Media';
 import { MediaDetail } from '../../../../shared/models/MediaDetail';
+import { WatchlistChangeEvent } from '../../../../shared/components/watchlist-button/watchlist-button';
 
 @Component({
   selector: 'app-watchlist-page',
@@ -20,7 +21,6 @@ export class WatchlistPage {
   readonly items = signal<Media[]>([]);
   readonly isLoading = signal(false);
   readonly hasError = signal(false);
-  readonly removingKeys = signal<string[]>([]);
 
   readonly hasItems = computed(() => this.items().length > 0);
   readonly totalItems = computed(() => this.items().length);
@@ -58,27 +58,13 @@ export class WatchlistPage {
     }
   }
 
-  isRemoving(item: Media): boolean {
-    return this.removingKeys().includes(this.getItemKey(item));
-  }
-
-  async removeItem(item: Media): Promise<void> {
-    const itemKey = this.getItemKey(item);
-
-    if (this.removingKeys().includes(itemKey)) {
+  onItemWatchlistChanged(event: WatchlistChangeEvent): void {
+    if (event.isInWatchlist) {
       return;
     }
 
-    this.removingKeys.update((keys) => [...keys, itemKey]);
-
-    try {
-      await this.watchlistService.deleteItem(item.id, item.media_type);
-      this.items.update((items) => items.filter((entry) => this.getItemKey(entry) !== itemKey));
-    } catch {
-      this.hasError.set(true);
-    } finally {
-      this.removingKeys.update((keys) => keys.filter((key) => key !== itemKey));
-    }
+    const removedKey = `${event.mediaType}:${event.mediaId}`;
+    this.items.update((items) => items.filter((item) => this.getItemKey(item) !== removedKey));
   }
 
   private mapDetailToMedia(detail: MediaDetail): Media {

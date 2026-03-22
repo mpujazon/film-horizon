@@ -1,15 +1,15 @@
 import { NgOptimizedImage, ViewportScroller } from '@angular/common';
-import { ChangeDetectionStrategy, Component, computed, effect, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { map } from 'rxjs';
 import { API_CONFIG } from '../../../../core/config/api.config';
 import { MediaCastMember, MediaCrewMember, MediaDetail } from '../../../../shared/models/MediaDetail';
-import {WatchlistService} from '../../../../core/services/watchlist/watchlist-service';
+import { WatchlistButton } from '../../../../shared/components/watchlist-button/watchlist-button';
 
 @Component({
   selector: 'app-media-detail',
-  imports: [NgOptimizedImage, RouterLink],
+  imports: [NgOptimizedImage, RouterLink, WatchlistButton],
   templateUrl: './media-detail.html',
   styleUrl: './media-detail.css',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -17,13 +17,7 @@ import {WatchlistService} from '../../../../core/services/watchlist/watchlist-se
 export class MediaDetailPage {
   private readonly route = inject(ActivatedRoute);
   private readonly viewportScroller = inject(ViewportScroller);
-  private readonly  watchlistService = inject(WatchlistService);
   protected readonly imageBaseUrl = API_CONFIG.tmdbImageBaseUrl;
-  protected readonly isInWatchlist = signal(false);
-
-  async ngOnInit(){
-    this.getItemWatchlistStatus();
-  }
 
   protected readonly media = toSignal(
     this.route.data.pipe(map((data) => (data['media'] as MediaDetail | null) ?? null)),
@@ -138,43 +132,4 @@ export class MediaDetailPage {
   private findCrewByJob(crew: MediaCrewMember[], job: string): MediaCrewMember | null {
     return crew.find((member) => member.job === job) ?? null;
   }
-
-  protected async addToWatchlist(): Promise<void> {
-    const media = this.media();
-
-    if (!media) {
-      return;
-    }
-
-    await this.watchlistService.saveItem(media.id, media.media_type);
-    this.isInWatchlist.set(true);
-  }
-
-  protected async deleteFromWatchlist():Promise<void>{
-    const media = this.media();
-
-    if(!media){
-      return;
-    }
-
-    await this.watchlistService.deleteItem(media.id, media.media_type);
-    this.isInWatchlist.set(false);
-  }
-
-  protected async getItemWatchlistStatus(){
-    const media = this.media();
-
-    if(!media){
-      return;
-    }
-
-    const result = await this.watchlistService.isItemInUserWatchlist(
-      media.id,
-      media.media_type
-    );
-
-    this.isInWatchlist.set(result);
-  }
-
-
 }

@@ -1,0 +1,29 @@
+<button
+  type="button"
+  [class]="buttonClass()"
+  [disabled]="isLoading()"
+  [attr.aria-pressed]="isInWatchlist()"
+  [attr.aria-label]="ariaLabel()"
+  [attr.aria-invalid]="hasError() ? 'true' : null"
+  (click)="toggleWatchlist()"
+>
+  <svg viewBox="0 0 24 24" class="h-5 w-5" aria-hidden="true">
+    @if (isInWatchlist()) {
+      <path
+        d="M20 6L9 17L4 12"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    } @else {
+      <path d="M12 5V19" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+      <path d="M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+    }
+  </svg>
+
+  @if (variant() !== 'icon') {
+    <span>{{ label() }}</span>
+  }
+</button>
