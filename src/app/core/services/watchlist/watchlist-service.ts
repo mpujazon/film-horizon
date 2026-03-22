@@ -1,7 +1,18 @@
 import {inject, Injectable} from '@angular/core';
-import {doc, Firestore, setDoc, serverTimestamp, query, getDoc, deleteDoc} from '@angular/fire/firestore';
+import {
+  doc,
+  Firestore,
+  setDoc,
+  serverTimestamp,
+  query,
+  getDoc,
+  deleteDoc,
+  where,
+  collection,
+  getDocs
+} from '@angular/fire/firestore';
 import {AuthService} from '../auth/auth-service';
-import {MediaType} from '../../../shared/models/UserData';
+import {MediaType, WatchlistItem} from '../../../shared/models/UserData';
 
 @Injectable({
   providedIn: 'root',
@@ -10,6 +21,26 @@ export class WatchlistService {
   private readonly firestore = inject(Firestore);
   private readonly auth = inject(AuthService);
   private readonly collection = 'user_watchlist';
+
+  async getUserWatchlist (): Promise<WatchlistItem[]>{
+    try{
+      const userId = this.auth.user()?.uid;
+      if(!userId){
+        return [];
+      }
+      const q = query(
+        collection(this.firestore,this.collection),
+        where('userId','==',userId)
+      );
+
+      const snapshot = await getDocs(q);
+      return snapshot.docs.map(doc => doc.data() as WatchlistItem);
+
+    }catch(error){
+      console.error('Error getting all watchlist items', error);
+      return [];
+    }
+  }
 
   async saveItem(tmdbId: number, mediaType: MediaType) {
     try{
