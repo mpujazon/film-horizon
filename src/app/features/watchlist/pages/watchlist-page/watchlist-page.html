@@ -1,0 +1,74 @@
+<section class="container mx-auto px-4 pb-12 pt-32 sm:px-6 lg:px-8 md:pt-24">
+  <header class="relative mb-8 overflow-hidden rounded-3xl border border-border/70 bg-card/70 p-5 shadow-[0_12px_45px_-30px_rgba(0,0,0,0.5)] backdrop-blur-sm md:p-7">
+    <div class="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(250,204,21,0.16),transparent_35%),radial-gradient(circle_at_bottom_left,rgba(14,165,233,0.14),transparent_30%)]"></div>
+    <div class="relative">
+      <p class="text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground">Your library</p>
+      <h1 class="mt-2 text-3xl font-bold tracking-tight text-foreground md:text-4xl">Watchlist</h1>
+      <p class="mt-2 max-w-2xl text-sm text-muted-foreground md:text-base">
+        Keep track of titles you want to watch next. Your list is synced to your account.
+      </p>
+      <div class="mt-4 inline-flex items-center gap-2 rounded-full border border-border bg-background/75 px-3.5 py-1.5 text-xs font-semibold uppercase tracking-[0.12em] text-foreground">
+        <span>{{ totalItems() }}</span>
+        <span>{{ totalItems() === 1 ? 'saved title' : 'saved titles' }}</span>
+      </div>
+    </div>
+  </header>
+
+  @if (isLoading()) {
+    <div class="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3 md:gap-6 xl:grid-cols-4">
+      @for (placeholder of [1, 2, 3, 4, 5, 6, 7, 8]; track placeholder) {
+        <div class="overflow-hidden rounded-[1.25rem] border border-border/60 bg-card/60">
+          <div class="aspect-[2/3] w-full animate-pulse bg-muted/50"></div>
+          <div class="space-y-2 p-3">
+            <div class="h-3 w-4/5 animate-pulse rounded-full bg-muted/60"></div>
+            <div class="h-3 w-2/3 animate-pulse rounded-full bg-muted/60"></div>
+          </div>
+        </div>
+      }
+    </div>
+  }
+
+  @if (!isLoading() && hasError()) {
+    <section class="rounded-2xl border border-destructive/30 bg-destructive/10 p-6 text-center">
+      <h2 class="text-lg font-semibold text-foreground">We couldn't load your watchlist</h2>
+      <p class="mt-2 text-sm text-muted-foreground">
+        Please check your connection and try again.
+      </p>
+      <button
+        type="button"
+        class="mt-4 inline-flex items-center rounded-full border border-border bg-background px-4 py-2 text-sm font-semibold text-foreground transition hover:border-foreground/40 hover:bg-card"
+        (click)="loadWatchlist()"
+      >
+        Try again
+      </button>
+    </section>
+  }
+
+  @if (!isLoading() && !hasError() && !hasItems()) {
+    <section class="rounded-3xl border border-border/70 bg-card/70 px-6 py-12 text-center shadow-[0_12px_45px_-30px_rgba(0,0,0,0.5)]">
+      <div class="mx-auto grid h-16 w-16 place-items-center rounded-full border border-border/80 bg-background/80 text-foreground">
+        <svg viewBox="0 0 24 24" class="h-7 w-7" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="m19 21-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+        </svg>
+      </div>
+      <h2 class="mt-4 text-2xl font-bold tracking-tight text-foreground">Your watchlist is empty</h2>
+      <p class="mx-auto mt-2 max-w-lg text-sm text-muted-foreground md:text-base">
+        Start exploring and save movies or TV shows to build your next watch session.
+      </p>
+      <a
+        routerLink="/"
+        class="mt-6 inline-flex items-center rounded-full border border-border bg-background px-5 py-2.5 text-sm font-semibold text-foreground transition hover:border-foreground/40 hover:bg-card"
+      >
+        Explore titles
+      </a>
+    </section>
+  }
+
+  @if (!isLoading() && hasItems()) {
+    <div class="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3 md:gap-6 xl:grid-cols-4">
+      @for (item of items(); track item.media_type + ':' + item.id) {
+        <app-movie-card [movie]="item" (watchlistChanged)="onItemWatchlistChanged($event)" />
+      }
+    </div>
+  }
+</section>

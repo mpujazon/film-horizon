@@ -3,7 +3,8 @@ import { provideRouter } from '@angular/router';
 import { of } from 'rxjs';
 
 import { MovieCard } from './movie-card';
-import { TmdbService } from '../../../core/services/tmdb-service';
+import { TmdbService } from '../../../core/services/tmdb/tmdb-service';
+import { WatchlistService } from '../../../core/services/watchlist/watchlist-service';
 import { Media } from '../../models/Media';
 import { MediaDetail, MediaVideo } from '../../models/MediaDetail';
 
@@ -16,6 +17,11 @@ describe('MovieCard', () => {
       lastGetMediaDetailArgs = [mediaType, mediaId];
       return of(createDetailResponse([]));
     }
+  };
+  const watchlistServiceMock: Pick<WatchlistService, 'isItemInUserWatchlist' | 'saveItem' | 'deleteItem'> = {
+    isItemInUserWatchlist: () => Promise.resolve(false),
+    saveItem: () => Promise.resolve(),
+    deleteItem: () => Promise.resolve()
   };
   const movie: Media = {
     adult: false,
@@ -42,7 +48,8 @@ describe('MovieCard', () => {
       imports: [MovieCard],
       providers: [
         provideRouter([]),
-        { provide: TmdbService, useValue: tmdbServiceMock }
+        { provide: TmdbService, useValue: tmdbServiceMock },
+        { provide: WatchlistService, useValue: watchlistServiceMock }
       ]
     })
     .compileComponents();

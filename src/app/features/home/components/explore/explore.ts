@@ -7,7 +7,7 @@ import {
   signal
 } from '@angular/core';
 import { MovieCard } from '../../../../shared/components/movie-card/movie-card';
-import { TmdbService } from '../../../../core/services/tmdb-service';
+import { TmdbService } from '../../../../core/services/tmdb/tmdb-service';
 import { Media } from '../../../../shared/models/Media';
 
 @Component({
