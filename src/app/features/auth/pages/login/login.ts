@@ -30,7 +30,7 @@ export class Login {
     try{
       const {email, password} = this.loginForm.getRawValue();
       await this.authService.login(email,password);
-      await this.router.navigate(['/']);
+      await this.router.navigate(['']);
     }catch(error){
       this.showLoginError(error as Error);
     }finally {

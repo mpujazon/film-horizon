@@ -14,25 +14,22 @@ import {MainLayout} from './core/layout/main-layout/main-layout';
 
 export const routes: Routes = [
   {
-    path: '',
+    path: 'login',
     component: AuthLayout,
-    children: [
-      {
-        path: 'login',
-        component: Login
-      },
-      {
-        path: 'register',
-        component: Register
-      },
-      {
-        path: 'verify-email',
-        component: EmailVerification
-      }
-    ]
+    children: [{ path: '', component: Login }]
   },
   {
-    path:"",
+    path: 'register',
+    component: AuthLayout,
+    children: [{ path: '', component: Register }]
+  },
+  {
+    path: 'verify-email',
+    component: AuthLayout,
+    children: [{ path: '', component: EmailVerification }]
+  },
+  {
+    path: '',
     component: MainLayout,
     canActivateChild: [authGuard],
     children: [
@@ -66,8 +63,8 @@ export const routes: Routes = [
         }
       },
       {
-        path:"**",
-        redirectTo:""
+        path: '**',
+        redirectTo: ''
       }
     ]
   }
