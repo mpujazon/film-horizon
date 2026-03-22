@@ -8,6 +8,7 @@ import { actorDetailResolver } from './features/details/resolvers/actor-detail.r
 import {Login} from './features/auth/pages/login/login';
 import {authGuard} from './core/guards/auth-guard';
 import {Register} from './features/auth/pages/register/register/register';
+import {EmailVerification} from './features/auth/pages/email-verification/email-verification';
 
 export const routes: Routes = [
   {
@@ -17,6 +18,10 @@ export const routes: Routes = [
   {
     path:'register',
     component: Register
+  },
+  {
+    path:'verify-email',
+    component: EmailVerification
   },
   {
     path:"",
