@@ -1,7 +1,7 @@
 import { inject } from '@angular/core';
 import { ResolveFn } from '@angular/router';
 import { catchError, of } from 'rxjs';
-import { TmdbService } from '../../../core/services/tmdb-service';
+import { TmdbService } from '../../../core/services/tmdb/tmdb-service';
 import { ActorDetail } from '../../../shared/models/ActorDetail';
 
 export const actorDetailResolver: ResolveFn<ActorDetail | null> = (route) => {

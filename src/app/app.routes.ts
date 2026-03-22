@@ -11,6 +11,7 @@ import {Register} from './features/auth/pages/register/register/register';
 import {EmailVerification} from './features/auth/pages/email-verification/email-verification';
 import {AuthLayout} from './core/layout/auth-layout/auth-layout';
 import {MainLayout} from './core/layout/main-layout/main-layout';
+import {WatchlistPage} from './features/watchlist/pages/watchlist-page/watchlist-page';
 
 export const routes: Routes = [
   {
@@ -40,6 +41,10 @@ export const routes: Routes = [
       {
         path: 'search',
         component: SearchResults
+      },
+      {
+        path: 'watchlist',
+        component: WatchlistPage
       },
       {
         path: 'movie/:id',

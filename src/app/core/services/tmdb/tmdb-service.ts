@@ -1,10 +1,10 @@
 import {inject, Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
-import {API_CONFIG} from '../config/api.config';
+import {API_CONFIG} from '../../config/api.config';
 import {Observable, map} from 'rxjs';
-import {MediaListResponse} from '../../shared/models/PaginatedResponse';
-import { MediaDetail, MediaType } from '../../shared/models/MediaDetail';
-import { ActorDetail } from '../../shared/models/ActorDetail';
+import {MediaListResponse} from '../../../shared/models/PaginatedResponse';
+import { MediaDetail, MediaType } from '../../../shared/models/MediaDetail';
+import { ActorDetail } from '../../../shared/models/ActorDetail';
 
 @Injectable({
   providedIn: 'root',

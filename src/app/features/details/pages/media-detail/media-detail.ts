@@ -1,14 +1,15 @@
 import { NgOptimizedImage, ViewportScroller } from '@angular/common';
-import { ChangeDetectionStrategy, Component, computed, effect, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { map } from 'rxjs';
 import { API_CONFIG } from '../../../../core/config/api.config';
 import { MediaCastMember, MediaCrewMember, MediaDetail } from '../../../../shared/models/MediaDetail';
+import { WatchlistButton } from '../../../../shared/components/watchlist-button/watchlist-button';
 
 @Component({
   selector: 'app-media-detail',
-  imports: [NgOptimizedImage, RouterLink],
+  imports: [NgOptimizedImage, RouterLink, WatchlistButton],
   templateUrl: './media-detail.html',
   styleUrl: './media-detail.css',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -17,7 +18,6 @@ export class MediaDetailPage {
   private readonly route = inject(ActivatedRoute);
   private readonly viewportScroller = inject(ViewportScroller);
   protected readonly imageBaseUrl = API_CONFIG.tmdbImageBaseUrl;
-  protected readonly isInWatchlist = signal(false);
 
   protected readonly media = toSignal(
     this.route.data.pipe(map((data) => (data['media'] as MediaDetail | null) ?? null)),
@@ -127,10 +127,6 @@ export class MediaDetailPage {
 
   protected getProfileUrl(castMember: MediaCastMember): string {
     return castMember.profile_path ? `${this.imageBaseUrl}/w185${castMember.profile_path}` : '';
-  }
-
-  protected toggleWatchlist(): void {
-    this.isInWatchlist.update((value) => !value);
   }
 
   private findCrewByJob(crew: MediaCrewMember[], job: string): MediaCrewMember | null {

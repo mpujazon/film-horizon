@@ -42,17 +42,12 @@
           Open Detail
         </a>
 
-        <button
-          type="button"
-          class="flex items-center justify-center gap-2 rounded-md bg-secondary/80 px-6 py-3 font-medium text-foreground transition-colors hover:bg-secondary"
-          (click)="onAddToWatchlist()"
-        >
-          <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M12 5v14"></path>
-            <path d="M5 12h14"></path>
-          </svg>
-          Add to Watchlist
-        </button>
+        <app-watchlist-button
+          [mediaId]="movie.id"
+          [mediaType]="movie.media_type"
+          [mediaTitle]="movie.title || movie.name || 'this title'"
+          variant="compact"
+        />
       </div>
 
       <div class="mt-6 flex items-center gap-2">

@@ -6,26 +6,24 @@ import {
   effect,
   inject,
   input,
-  output,
   signal
 } from '@angular/core';
 import { NgOptimizedImage } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import {API_CONFIG} from '../../../../core/config/api.config';
 import {Media} from '../../../../shared/models/Media';
+import { WatchlistButton } from '../../../../shared/components/watchlist-button/watchlist-button';
 
 @Component({
   selector: 'app-featured-carousel',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [NgOptimizedImage, RouterLink],
+  imports: [NgOptimizedImage, RouterLink, WatchlistButton],
   templateUrl: './featured-carousel.html'
 })
 export class FeaturedCarousel {
   readonly movies = input<readonly Media[]>([]);
   readonly autoplay = input<boolean>(true);
   readonly autoplayIntervalMs = input<number>(7000);
-
-  readonly watchlistClicked = output<void>();
   protected readonly currentStep = signal(0);
 
   protected readonly hasMovies = computed(() => this.movies().length > 0);
@@ -133,10 +131,6 @@ export class FeaturedCarousel {
       event.preventDefault();
       this.nextStep();
     }
-  }
-
-  protected onAddToWatchlist(): void {
-    this.watchlistClicked.emit();
   }
 
   private stopAutoplay(): void {

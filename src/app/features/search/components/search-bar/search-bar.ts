@@ -23,7 +23,7 @@ import {
   tap
 } from 'rxjs';
 import { NavigationEnd, Router } from '@angular/router';
-import { TmdbService } from '../../../../core/services/tmdb-service';
+import { TmdbService } from '../../../../core/services/tmdb/tmdb-service';
 import { Media } from '../../../../shared/models/Media';
 import { API_CONFIG } from '../../../../core/config/api.config';
 

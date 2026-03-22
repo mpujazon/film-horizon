@@ -72,23 +72,12 @@
                 </a>
               }
 
-              <button
-                type="button"
-                class="inline-flex h-11 items-center justify-center gap-2 rounded-xl border border-white/15 bg-white/10 px-4 text-sm font-semibold text-white backdrop-blur-md transition-all hover:bg-white/20 active:scale-95"
-                [attr.aria-pressed]="isInWatchlist()"
-                [attr.aria-label]="isInWatchlist() ? 'Remove from watchlist' : 'Add to watchlist'"
-                (click)="toggleWatchlist()"
-              >
-                <svg viewBox="0 0 24 24" class="h-5 w-5" aria-hidden="true">
-                  @if (isInWatchlist()) {
-                    <path d="M20 6L9 17L4 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                  } @else {
-                    <path d="M12 5V19" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-                    <path d="M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-                  }
-                </svg>
-                {{ isInWatchlist() ? 'In Watchlist' : 'Add to Watchlist' }}
-              </button>
+              <app-watchlist-button
+                [mediaId]="media()!.id"
+                [mediaType]="media()!.media_type"
+                [mediaTitle]="title()"
+                variant="pill"
+              />
 
               <a
                 routerLink="/"

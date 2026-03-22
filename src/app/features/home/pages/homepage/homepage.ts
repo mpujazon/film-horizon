@@ -1,7 +1,7 @@
 import {Component, inject} from '@angular/core';
 import {AsyncPipe} from '@angular/common';
 import { FeaturedCarousel } from '../../components/featured-carousel/featured-carousel';
-import {TmdbService} from '../../../../core/services/tmdb-service';
+import {TmdbService} from '../../../../core/services/tmdb/tmdb-service';
 import {Observable, map} from 'rxjs';
 import {Media} from '../../../../shared/models/Media';
 import {Explore} from '../../components/explore/explore';

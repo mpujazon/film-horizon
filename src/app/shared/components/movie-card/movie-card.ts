@@ -12,13 +12,14 @@ import { NgOptimizedImage } from '@angular/common';
 import { Router } from '@angular/router';
 import { catchError, finalize, map, of } from 'rxjs';
 import { API_CONFIG } from '../../../core/config/api.config';
-import { TmdbService } from '../../../core/services/tmdb-service';
+import { TmdbService } from '../../../core/services/tmdb/tmdb-service';
 import { Media } from '../../models/Media';
 import { MediaVideo } from '../../models/MediaDetail';
+import { WatchlistButton, WatchlistChangeEvent } from '../watchlist-button/watchlist-button';
 
 @Component({
   selector: 'app-movie-card',
-  imports: [NgOptimizedImage],
+  imports: [NgOptimizedImage, WatchlistButton],
   templateUrl: './movie-card.html',
   styleUrl: './movie-card.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -31,13 +32,12 @@ export class MovieCard {
   private readonly tmdbService = inject(TmdbService);
 
   readonly movie = input.required<Media>();
-
-  readonly favoriteClicked = output<Media>();
+  readonly watchlistChanged = output<WatchlistChangeEvent>();
 
   readonly imageLoadFailed = signal(false);
   readonly isTrailerLoading = signal(false);
 
-  readonly title = computed(() => this.movie().title || this.movie().name);
+  readonly title = computed(() => this.movie().title || this.movie().name || 'Untitled');
   readonly movieDetailUrl = computed(() => {
     const mediaTypePath = this.movie().media_type === 'tv' ? 'tv' : 'movie';
     return `/${mediaTypePath}/${this.movie().id}`;
@@ -90,10 +90,6 @@ export class MovieCard {
       });
   }
 
-  onFavoriteClick(): void {
-    this.favoriteClicked.emit(this.movie());
-  }
-
   onCardClick(): void {
     void this.router.navigateByUrl(this.movieDetailUrl());
   }
@@ -105,6 +101,10 @@ export class MovieCard {
 
     event.preventDefault();
     this.onCardClick();
+  }
+
+  onWatchlistChanged(event: WatchlistChangeEvent): void {
+    this.watchlistChanged.emit(event);
   }
 
   private getTrailerUrl(videos: MediaVideo[]): string | null {
