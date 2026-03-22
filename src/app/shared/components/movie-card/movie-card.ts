@@ -12,7 +12,7 @@ import { NgOptimizedImage } from '@angular/common';
 import { Router } from '@angular/router';
 import { catchError, finalize, map, of } from 'rxjs';
 import { API_CONFIG } from '../../../core/config/api.config';
-import { TmdbService } from '../../../core/services/tmdb-service';
+import { TmdbService } from '../../../core/services/tmdb/tmdb-service';
 import { Media } from '../../models/Media';
 import { MediaVideo } from '../../models/MediaDetail';
 

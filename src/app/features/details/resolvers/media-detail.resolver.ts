@@ -1,7 +1,7 @@
 import { inject } from '@angular/core';
 import { ActivatedRouteSnapshot, ResolveFn } from '@angular/router';
 import { catchError, of } from 'rxjs';
-import { TmdbService } from '../../../core/services/tmdb-service';
+import { TmdbService } from '../../../core/services/tmdb/tmdb-service';
 import { MediaDetail, MediaType } from '../../../shared/models/MediaDetail';
 
 const getMediaTypeFromRoute = (route: ActivatedRouteSnapshot): MediaType => {

@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { EMPTY, of } from 'rxjs';
 import { Router } from '@angular/router';
-import { TmdbService } from '../../../../core/services/tmdb-service';
+import { TmdbService } from '../../../../core/services/tmdb/tmdb-service';
 
 import { SearchBar } from './search-bar';
 

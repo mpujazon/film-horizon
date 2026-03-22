@@ -3,7 +3,7 @@ import { provideRouter } from '@angular/router';
 import { of } from 'rxjs';
 
 import { MovieCard } from './movie-card';
-import { TmdbService } from '../../../core/services/tmdb-service';
+import { TmdbService } from '../../../core/services/tmdb/tmdb-service';
 import { Media } from '../../models/Media';
 import { MediaDetail, MediaVideo } from '../../models/MediaDetail';
 

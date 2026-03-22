@@ -9,7 +9,7 @@ import {
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { catchError, distinctUntilChanged, finalize, map, of, switchMap, tap } from 'rxjs';
-import { TmdbService } from '../../../../core/services/tmdb-service';
+import { TmdbService } from '../../../../core/services/tmdb/tmdb-service';
 import { MovieCard } from '../../../../shared/components/movie-card/movie-card';
 import { Media } from '../../../../shared/models/Media';
 
