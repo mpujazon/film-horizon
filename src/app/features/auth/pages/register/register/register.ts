@@ -28,6 +28,7 @@ export class Register {
     try{
       const {email, password} = this.registerForm.getRawValue();
       await this.authService.register(email,password);
+      await this.router.navigate(['/verify-email']);
     }catch(error){
       console.error('Error on register', error);
     }finally {

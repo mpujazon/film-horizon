@@ -39,4 +39,8 @@ export class AuthService {
   isAuthenticated(): boolean{
     return !!this.user();
   }
+
+  isEmailVerified(): boolean{
+    return this.user()?.emailVerified ?? false;
+  }
 }
