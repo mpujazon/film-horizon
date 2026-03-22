@@ -5,39 +5,67 @@ import { MediaDetailPage } from './features/details/pages/media-detail/media-det
 import { mediaDetailResolver } from './features/details/resolvers/media-detail.resolver';
 import { ActorDetailPage } from './features/details/pages/actor-detail/actor-detail';
 import { actorDetailResolver } from './features/details/resolvers/actor-detail.resolver';
+import {Login} from './features/auth/pages/login/login';
+import {authGuard} from './core/guards/auth-guard';
+import {Register} from './features/auth/pages/register/register/register';
+import {EmailVerification} from './features/auth/pages/email-verification/email-verification';
+import {AuthLayout} from './core/layout/auth-layout/auth-layout';
+import {MainLayout} from './core/layout/main-layout/main-layout';
 
 export const routes: Routes = [
   {
-    path:"",
-    component: Homepage
+    path: 'login',
+    component: AuthLayout,
+    children: [{ path: '', component: Login }]
   },
   {
-    path: 'search',
-    component: SearchResults
+    path: 'register',
+    component: AuthLayout,
+    children: [{ path: '', component: Register }]
   },
   {
-    path: 'movie/:id',
-    component: MediaDetailPage,
-    resolve: {
-      media: mediaDetailResolver
-    }
+    path: 'verify-email',
+    component: AuthLayout,
+    children: [{ path: '', component: EmailVerification }]
   },
   {
-    path: 'tv/:id',
-    component: MediaDetailPage,
-    resolve: {
-      media: mediaDetailResolver
-    }
-  },
-  {
-    path: 'actor/:id',
-    component: ActorDetailPage,
-    resolve: {
-      actor: actorDetailResolver
-    }
-  },
-  {
-    path:"**",
-    redirectTo:""
+    path: '',
+    component: MainLayout,
+    canActivateChild: [authGuard],
+    children: [
+      {
+        path: '',
+        component: Homepage
+      },
+      {
+        path: 'search',
+        component: SearchResults
+      },
+      {
+        path: 'movie/:id',
+        component: MediaDetailPage,
+        resolve: {
+          media: mediaDetailResolver
+        }
+      },
+      {
+        path: 'tv/:id',
+        component: MediaDetailPage,
+        resolve: {
+          media: mediaDetailResolver
+        }
+      },
+      {
+        path: 'actor/:id',
+        component: ActorDetailPage,
+        resolve: {
+          actor: actorDetailResolver
+        }
+      },
+      {
+        path: '**',
+        redirectTo: ''
+      }
+    ]
   }
 ];

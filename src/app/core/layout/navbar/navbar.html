@@ -28,9 +28,40 @@
           </svg>
           <span class="hidden lg:inline">Watchlist</span>
         </button>
-        <button type="button" class="text-foreground hover:text-primary hover:cursor-pointer transition-colors font-medium ml-2 hidden sm:block">
-          Sign In
-        </button>
+        <div class="flex items-center gap-2 rounded-full border border-border/70 bg-card/70 pl-1.5 pr-1 py-1 shadow-sm backdrop-blur-sm">
+          <div class="flex h-9 w-9 items-center justify-center rounded-full bg-primary/15 text-primary ring-1 ring-primary/30">
+            <svg class="h-5 w-5" viewBox="0 0 24 24" stroke="currentColor" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <circle cx="12" cy="9" r="3" stroke-width="1.5"/>
+              <path d="M17.9691 20C17.81 17.1085 16.9247 15 11.9999 15C7.07521 15 6.18991 17.1085 6.03076 20" stroke-width="1.5" stroke-linecap="round"/>
+              <path d="M7 3.33782C8.47087 2.48697 10.1786 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 10.1786 2.48697 8.47087 3.33782 7" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </div>
+
+          @if (authService.user()?.email; as email) {
+            <p class="hidden lg:block text-sm font-medium text-foreground/90">{{ email.split('@')[0] }}</p>
+          }
+
+          <button
+            (click)="onLogOut()"
+            type="button"
+            class="hidden md:inline-flex items-center gap-1 rounded-full border border-border/70 bg-background px-3 py-1.5 text-sm font-medium text-foreground transition-colors hover:border-primary/50 hover:bg-primary/10 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
+          >
+            <span>Sign Out</span>
+          </button>
+
+          <button
+            (click)="onLogOut()"
+            type="button"
+            class="inline-flex md:hidden h-9 w-9 items-center justify-center rounded-full text-foreground transition-colors hover:bg-primary/10 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
+            aria-label="Sign out"
+          >
+            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+              <polyline points="16 17 21 12 16 7"></polyline>
+              <line x1="21" x2="9" y1="12" y2="12"></line>
+            </svg>
+          </button>
+        </div>
         <button
           type="button"
           class="md:hidden text-foreground p-2"
@@ -73,13 +104,19 @@
               {{link.label}}
             </a>
           }
-          <button
-            type="button"
-            class="text-left px-2 py-2 rounded text-foreground hover:text-primary hover:bg-card/70 transition-colors font-medium sm:hidden"
-            (click)="closeMobileMenu()"
-          >
-            Sign In
-          </button>
+          @if (authService.user()?.email; as email) {
+            <div class="mt-2 rounded-xl border border-border/60 bg-card/60 px-3 py-2">
+              <p class="text-xs uppercase tracking-wide text-muted-foreground">Signed in as</p>
+              <p class="text-sm font-medium text-foreground">{{ email.split('@')[0] }}</p>
+              <button
+                type="button"
+                class="mt-2 inline-flex items-center rounded-full border border-border/70 bg-background px-3 py-1.5 text-sm font-medium text-foreground transition-colors hover:border-primary/50 hover:bg-primary/10 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
+                (click)="onLogOut(); closeMobileMenu()"
+              >
+                Sign Out
+              </button>
+            </div>
+          }
         </div>
       </div>
     }
