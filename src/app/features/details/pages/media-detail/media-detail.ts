@@ -5,6 +5,7 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { map } from 'rxjs';
 import { API_CONFIG } from '../../../../core/config/api.config';
 import { MediaCastMember, MediaCrewMember, MediaDetail } from '../../../../shared/models/MediaDetail';
+import {WatchlistService} from '../../../../core/services/watchlist/watchlist-service';
 
 @Component({
   selector: 'app-media-detail',
@@ -16,8 +17,13 @@ import { MediaCastMember, MediaCrewMember, MediaDetail } from '../../../../share
 export class MediaDetailPage {
   private readonly route = inject(ActivatedRoute);
   private readonly viewportScroller = inject(ViewportScroller);
+  private readonly  watchlistService = inject(WatchlistService);
   protected readonly imageBaseUrl = API_CONFIG.tmdbImageBaseUrl;
   protected readonly isInWatchlist = signal(false);
+
+  async ngOnInit(){
+    this.getItemWatchlistStatus();
+  }
 
   protected readonly media = toSignal(
     this.route.data.pipe(map((data) => (data['media'] as MediaDetail | null) ?? null)),
@@ -129,11 +135,35 @@ export class MediaDetailPage {
     return castMember.profile_path ? `${this.imageBaseUrl}/w185${castMember.profile_path}` : '';
   }
 
-  protected toggleWatchlist(): void {
-    this.isInWatchlist.update((value) => !value);
-  }
-
   private findCrewByJob(crew: MediaCrewMember[], job: string): MediaCrewMember | null {
     return crew.find((member) => member.job === job) ?? null;
   }
+
+  protected async addToWatchlist(): Promise<void> {
+    const media = this.media();
+
+    if (!media) {
+      return;
+    }
+
+    await this.watchlistService.saveItem(media.id, media.media_type);
+    this.isInWatchlist.set(true);
+  }
+
+  async getItemWatchlistStatus(){
+    const media = this.media();
+
+    if(!media){
+      return;
+    }
+
+    const result = await this.watchlistService.isItemInUserWatchlist(
+      media.id,
+      media.media_type
+    );
+
+    this.isInWatchlist.set(result);
+  }
+
+
 }

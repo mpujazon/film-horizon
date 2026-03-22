@@ -1,13 +1,13 @@
-type MediaType = 'movie' | 'tv';
+export type MediaType = 'movie' | 'tv';
 
-interface WatchlistItem {
+export interface WatchlistItem {
   userId: string;
   tmdbId: number;
   mediaType: MediaType;
   createdAt: Date;
 }
 
-interface UserRating {
+export interface UserRating {
   userId: string;
   tmdbId: number;
   mediaType: MediaType;
