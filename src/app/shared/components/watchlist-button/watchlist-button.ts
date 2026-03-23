@@ -50,25 +50,27 @@ export class WatchlistButton {
 
   readonly buttonClass = computed(() => {
     const base =
-      'inline-flex items-center justify-center gap-2 rounded-xl transition-all active:scale-95 disabled:cursor-not-allowed disabled:opacity-60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50';
+      'inline-flex items-center justify-center gap-2 rounded-xl transition-all active:scale-95 disabled:cursor-not-allowed disabled:opacity-70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground focus-visible:ring-offset-2 focus-visible:ring-offset-background';
     const variant = this.variant();
     const active = this.isInWatchlist();
+    const activeColors = 'border border-foreground bg-foreground text-background hover:bg-white/90';
+    const inactiveColors = 'border border-border bg-secondary text-foreground hover:bg-muted';
 
     if (variant === 'icon') {
       return active
-        ? `${base} h-10 w-10 border border-primary/60 bg-primary/20 text-primary backdrop-blur-md hover:bg-primary/30`
-        : `${base} h-10 w-10 border border-white/15 bg-white/10 text-white backdrop-blur-md hover:bg-white/20`;
+        ? `${base} h-10 w-10 ${activeColors}`
+        : `${base} h-10 w-10 ${inactiveColors}`;
     }
 
     if (variant === 'compact') {
       return active
-        ? `${base} h-11 rounded-md border border-primary/50 bg-primary/20 px-5 text-sm font-semibold text-primary hover:bg-primary/30`
-        : `${base} h-11 rounded-md bg-secondary/80 px-5 text-sm font-medium text-foreground hover:bg-secondary`;
+        ? `${base} h-11 rounded-md px-5 text-sm font-semibold ${activeColors}`
+        : `${base} h-11 rounded-md px-5 text-sm font-medium ${inactiveColors}`;
     }
 
     return active
-      ? `${base} h-11 border border-primary/60 bg-primary/20 px-4 text-sm font-semibold text-primary hover:bg-primary/30`
-      : `${base} h-11 border border-white/15 bg-white/10 px-4 text-sm font-semibold text-white backdrop-blur-md hover:bg-white/20`;
+      ? `${base} h-11 px-4 text-sm font-semibold ${activeColors}`
+      : `${base} h-11 px-4 text-sm font-semibold ${inactiveColors}`;
   });
 
   constructor() {
