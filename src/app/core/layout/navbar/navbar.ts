@@ -15,7 +15,6 @@ import {AuthService} from '../../services/auth/auth-service';
 export class Navbar {
   readonly authService = inject(AuthService);
   private router = inject(Router);
-  appName = 'FilmHorizon';
   isMobileMenuOpen = signal(false);
 
   links = [
@@ -23,16 +22,6 @@ export class Navbar {
       id:1,
       label:'Home',
       path:'/'
-    },
-    {
-      id:2,
-      label:'Movies',
-      path:'/movies'
-    },
-    {
-      id:3,
-      label:'TV Shows',
-      path:'/tv-shows'
     }
   ];
 
