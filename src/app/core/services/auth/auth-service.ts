@@ -20,7 +20,6 @@ export class AuthService {
       .then(async (userCredential)=>{
         if(this.auth.currentUser){
           await sendEmailVerification(this.auth.currentUser);
-          console.log("Email verification sent!");
         }
           return userCredential;
       }).catch((error)=>{
@@ -34,13 +33,5 @@ export class AuthService {
 
   logout() {
     return signOut(this.auth);
-  }
-
-  isAuthenticated(): boolean{
-    return !!this.user();
-  }
-
-  isEmailVerified(): boolean{
-    return this.user()?.emailVerified ?? false;
   }
 }
