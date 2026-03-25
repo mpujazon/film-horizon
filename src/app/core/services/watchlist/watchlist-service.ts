@@ -24,7 +24,7 @@ export class WatchlistService {
 
   async getUserWatchlist(): Promise<WatchlistItem[]>{
     try{
-      const userId = this.auth.user()?.uid;
+      const userId = this.getCurrentUserId();
       if(!userId){
         return [];
       }
@@ -32,19 +32,19 @@ export class WatchlistService {
         collection(this.firestore,this.collection),
         where('userId','==',userId)
       );
-
       const snapshot = await getDocs(q);
       return snapshot.docs.map(doc => doc.data() as WatchlistItem);
-
     }catch(error){
       console.error('Error getting all watchlist items', error);
       return [];
     }
   }
 
-  async saveItem(tmdbId: number, mediaType: MediaType) {
+  async saveItem(tmdbId: number, mediaType: MediaType): Promise<void> {
     try{
-      const userId = this.auth.user()?.uid;
+      const userId = this.getCurrentUserId();
+      if(!userId) return;
+
       const documentId = `${userId}_${mediaType}_${tmdbId}`;
       const ref = doc(this.firestore, this.collection, documentId);
 
@@ -55,25 +55,29 @@ export class WatchlistService {
         createdAt: serverTimestamp()
       });
     }catch(error){
-      console.error('Error addingToWatchlist', error)
+      console.error('Error adding the media to watchlist.', error)
     }
   }
 
-  async deleteItem(tmdbId: number, mediaType: MediaType){
+  async deleteItem(tmdbId: number, mediaType: MediaType):Promise<void>{
     try{
-      const userId = this.auth.user()?.uid;
+      const userId = this.getCurrentUserId();
+      if(!userId) return;
+
       const documentId = `${userId}_${mediaType}_${tmdbId}`;
       const ref = doc(this.firestore, this.collection, documentId);
 
       await deleteDoc(ref);
     }catch(error){
-      console.error('Error deleting item', error)
+      console.error('Error removing media from watchlist.', error)
     }
   }
 
-  async isItemInUserWatchlist(tmdbId: number, mediaType: MediaType){
+  async isItemInUserWatchlist(tmdbId: number, mediaType: MediaType): Promise<boolean>{
     try{
-      const userId = this.auth.user()?.uid;
+      const userId = this.getCurrentUserId();
+      if(!userId) return false;
+
       const documentId = `${userId}_${mediaType}_${tmdbId}`;
 
       const ref = doc(this.firestore, this.collection, documentId);
@@ -82,5 +86,9 @@ export class WatchlistService {
     }catch(error){
       return false;
     }
+  }
+
+  private getCurrentUserId():string | null{
+    return this.auth.user()?.uid ?? null;
   }
 }
