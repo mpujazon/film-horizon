@@ -22,7 +22,7 @@ export class WatchlistService {
   private readonly auth = inject(AuthService);
   private readonly collection = 'user_watchlist';
 
-  async getUserWatchlist (): Promise<WatchlistItem[]>{
+  async getUserWatchlist(): Promise<WatchlistItem[]>{
     try{
       const userId = this.auth.user()?.uid;
       if(!userId){
