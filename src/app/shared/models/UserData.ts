@@ -6,11 +6,3 @@ export interface WatchlistItem {
   mediaType: MediaType;
   createdAt: Date;
 }
-
-export interface UserRating {
-  userId: string;
-  tmdbId: number;
-  mediaType: MediaType;
-  rating: number;
-  updatedAt: Date;
-}

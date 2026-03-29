@@ -58,18 +58,17 @@
             </div>
 
             <div class="mt-7 flex flex-wrap items-center gap-3">
-              @if (trailerUrl(); as trailer) {
-                <a
-                  [href]="trailer"
-                  target="_blank"
-                  rel="noreferrer"
+              @if (trailerKey()) {
+                <button
+                  type="button"
                   class="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-primary px-4 text-sm font-bold text-primary-foreground shadow-lg shadow-primary/30 transition-all hover:bg-primary/90 active:scale-95"
+                  (click)="openTrailerModal()"
                 >
                   <svg viewBox="0 0 24 24" class="h-4 w-4 fill-current" aria-hidden="true">
                     <path d="M7 5.5V18.5L18 12L7 5.5Z" />
                   </svg>
                   Watch Trailer
-                </a>
+                </button>
               }
 
               <app-watchlist-button
@@ -170,4 +169,11 @@
       </section>
     </div>
   }
+
+  <app-trailer-modal
+    [isOpen]="isTrailerModalOpen()"
+    [videoKey]="trailerKey()"
+    [title]="title()"
+    (closed)="closeTrailerModal()"
+  />
 </section>
