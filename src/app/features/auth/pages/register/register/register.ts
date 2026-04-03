@@ -18,7 +18,8 @@ export class Register {
 
   registerForm = this.formBuilder.nonNullable.group({
     email: ['', [Validators.email, Validators.required]],
-    password: ['', [Validators.minLength(8), Validators.required]]
+    password: ['', [Validators.minLength(8), Validators.required]],
+    confirmPassword: ['', [Validators.minLength(8), Validators.required]]
   });
 
   isSubmitting = false;
@@ -36,12 +37,12 @@ export class Register {
     }
   }
 
-  showError(controlName: 'email' | 'password'): boolean {
+  showError(controlName: 'email' | 'password' |'confirmPassword'): boolean {
     const c = this.registerForm.get(controlName);
     return !!c && c.invalid && (c.dirty || c.touched);
   }
 
-  getError(controlName: 'email' | 'password'): string | null {
+  getError(controlName: 'email' | 'password' | 'confirmPassword'): string | null {
     const c = this.registerForm.get(controlName);
     if (!c?.errors) return null;
 

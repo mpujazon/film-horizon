@@ -35,6 +35,20 @@
         }
       </div>
 
+      <div class="space-y-2">
+        <label for="confirmPassword" class="block text-sm font-medium text-foreground">Confirm password</label>
+        <input
+          formControlName="confirmPassword"
+          id="confirmPassword"
+          name="confirmPassword"
+          type="password"
+          class="w-full rounded-lg border border-input bg-input-background px-3 py-2.5 text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/30"
+        />
+        @if (showError('confirmPassword')){
+          <p class="text-xs py-1 text-destructive">{{ getError('confirmPassword') }}</p>
+        }
+      </div>
+
       <button
         [disabled]="registerForm.invalid"
         type="submit"
