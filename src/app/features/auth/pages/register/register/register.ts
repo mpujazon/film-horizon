@@ -1,8 +1,7 @@
-import {Component, inject, signal} from '@angular/core';
+import {ChangeDetectionStrategy, Component, inject, signal} from '@angular/core';
 import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
 import {Router, RouterLink} from '@angular/router';
 import {AuthService} from '../../../../../core/services/auth/auth-service';
-import {email} from '@angular/forms/signals';
 import {passwordsMatchValidator} from '../../../../../shared/validators/passwords-match.validator';
 
 @Component({
@@ -11,7 +10,8 @@ import {passwordsMatchValidator} from '../../../../../shared/validators/password
     ReactiveFormsModule,
     RouterLink
   ],
-  templateUrl: './register.html'
+  templateUrl: './register.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class Register {
   private readonly authService = inject(AuthService);
