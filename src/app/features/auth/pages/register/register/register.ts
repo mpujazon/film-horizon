@@ -1,7 +1,8 @@
-import {Component, inject} from '@angular/core';
+import {ChangeDetectionStrategy, Component, inject, signal} from '@angular/core';
 import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
 import {Router, RouterLink} from '@angular/router';
 import {AuthService} from '../../../../../core/services/auth/auth-service';
+import {passwordsMatchValidator} from '../../../../../shared/validators/passwords-match.validator';
 
 @Component({
   selector: 'app-register',
@@ -9,7 +10,8 @@ import {AuthService} from '../../../../../core/services/auth/auth-service';
     ReactiveFormsModule,
     RouterLink
   ],
-  templateUrl: './register.html'
+  templateUrl: './register.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class Register {
   private readonly authService = inject(AuthService);
@@ -18,9 +20,14 @@ export class Register {
 
   registerForm = this.formBuilder.nonNullable.group({
     email: ['', [Validators.email, Validators.required]],
-    password: ['', [Validators.minLength(8), Validators.required]]
-  });
+    password: ['', [Validators.minLength(8), Validators.required]],
+    confirmPassword: ['', [Validators.minLength(8), Validators.required]]
+  },
+    {
+      validators: passwordsMatchValidator
+    });
 
+  registerErrorMessage = signal('');
   isSubmitting = false;
 
   async onSubmit(){
@@ -31,17 +38,18 @@ export class Register {
       await this.router.navigate(['/verify-email']);
     }catch(error){
       console.error('Error on register', error);
+      this.showRegisterError(error as Error)
     }finally {
       this.isSubmitting = false;
     }
   }
 
-  showError(controlName: 'email' | 'password'): boolean {
+  showError(controlName: 'email' | 'password' |'confirmPassword'): boolean {
     const c = this.registerForm.get(controlName);
     return !!c && c.invalid && (c.dirty || c.touched);
   }
 
-  getError(controlName: 'email' | 'password'): string | null {
+  getError(controlName: 'email' | 'password' | 'confirmPassword'): string | null {
     const c = this.registerForm.get(controlName);
     if (!c?.errors) return null;
 
@@ -49,5 +57,11 @@ export class Register {
     if (c.errors['email']) return 'Email inalid';
     if (c.errors['minlength']) return `At least ${c.errors['minlength'].requiredLength} characters`;
     return 'Value not valid';
+  }
+
+  showRegisterError(error: Error) {
+    if (error.message.includes('auth/email-already-in-use')) {
+      this.registerErrorMessage.set('Email already in use.');
+    }
   }
 }

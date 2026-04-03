@@ -36,7 +36,7 @@
       </div>
 
       <button
-        [disabled]="loginForm.invalid"
+        [disabled]="loginForm.invalid || isSubmitting"
         type="submit"
         class="mt-2 w-full rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary/40 focus:ring-offset-2 focus:ring-offset-card disabled:bg-primary/25"
       >
