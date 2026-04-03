@@ -1,6 +1,6 @@
-import {Component, inject, signal} from '@angular/core';
-import { AuthService } from 'src/app/core/services/auth/auth-service';
-import {FormBuilder, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
+import {ChangeDetectionStrategy, Component, inject, signal} from '@angular/core';
+import {AuthService} from 'src/app/core/services/auth/auth-service';
+import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
 import {Router, RouterLink} from '@angular/router';
 
 @Component({
@@ -9,7 +9,8 @@ import {Router, RouterLink} from '@angular/router';
     RouterLink,
     ReactiveFormsModule
   ],
-  templateUrl: './login.html'
+  templateUrl: './login.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class Login {
   private readonly authService = inject(AuthService);
@@ -49,7 +50,7 @@ export class Login {
 
     if (c.errors['required']) return 'Required';
     if (c.errors['email']) return 'Email inalid';
-    if (c.errors['minlength']) return `At least ${c.errors['minlength'].requiredLength} characters`;
+    if (c.errors['minlength']) return `At least ${c.errors['minlength'].requiredLength} characters are needed`;
     return 'Value not valid';
   }
 
