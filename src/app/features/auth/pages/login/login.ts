@@ -50,7 +50,7 @@ export class Login {
 
     if (c.errors['required']) return 'Required';
     if (c.errors['email']) return 'Email inalid';
-    if (c.errors['minlength']) return `At least ${c.errors['minlength'].requiredLength} characters`;
+    if (c.errors['minlength']) return `At least ${c.errors['minlength'].requiredLength} characters are needed`;
     return 'Value not valid';
   }
 
