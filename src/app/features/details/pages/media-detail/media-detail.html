@@ -1,6 +1,16 @@
 <section class="detail-shell relative overflow-hidden pt-32 pb-16 md:pt-24">
   @if (hasMedia()) {
     <article class="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 intro-reveal">
+      <a
+        routerLink="/"
+        class="mb-4 inline-flex items-center gap-2 rounded-full border border-white/20 bg-black/35 px-4 py-2 text-sm font-semibold text-white/95 backdrop-blur-sm transition hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white md:mb-5"
+      >
+        <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15 6L9 12L15 18" />
+        </svg>
+        Back to Explore
+      </a>
+
       <header class="detail-hero relative overflow-hidden rounded-[2rem] border border-white/15 bg-black/55 p-6 md:p-10">
         @if (backdropUrl(); as backdrop) {
           <img
@@ -15,7 +25,7 @@
         <div class="absolute inset-0 bg-[linear-gradient(120deg,rgba(7,9,16,0.96)_25%,rgba(7,9,16,0.72)_54%,rgba(7,9,16,0.92)_100%)]"></div>
         <div class="detail-noise absolute inset-0"></div>
 
-        <div class="relative z-10 grid gap-8 lg:grid-cols-[minmax(0,220px)_minmax(0,1fr)] lg:items-end">
+        <div class="relative z-10 mt-6 grid gap-8 lg:grid-cols-[minmax(0,220px)_minmax(0,1fr)] lg:items-end">
           <div class="relative mx-auto w-full max-w-[240px] lg:mx-0">
             @if (posterUrl(); as poster) {
               <img
@@ -78,12 +88,6 @@
                 variant="pill"
               />
 
-              <a
-                routerLink="/"
-                class="inline-flex h-11 items-center justify-center rounded-xl border border-white/25 bg-black/30 px-4 text-sm font-semibold text-white transition hover:bg-white/10"
-              >
-                Back to Explore
-              </a>
             </div>
           </div>
         </div>
