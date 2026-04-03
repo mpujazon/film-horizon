@@ -2,6 +2,7 @@ import {Component, inject} from '@angular/core';
 import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
 import {Router, RouterLink} from '@angular/router';
 import {AuthService} from '../../../../../core/services/auth/auth-service';
+import {email} from '@angular/forms/signals';
 
 @Component({
   selector: 'app-register',
@@ -20,7 +21,10 @@ export class Register {
     email: ['', [Validators.email, Validators.required]],
     password: ['', [Validators.minLength(8), Validators.required]],
     confirmPassword: ['', [Validators.minLength(8), Validators.required]]
-  });
+  },
+    {
+      validators: password.equals(confirmPassword)
+    });
 
   isSubmitting = false;
 
