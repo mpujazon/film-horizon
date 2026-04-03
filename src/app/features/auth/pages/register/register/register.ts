@@ -1,8 +1,9 @@
-import {Component, inject} from '@angular/core';
+import {Component, inject, signal} from '@angular/core';
 import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
 import {Router, RouterLink} from '@angular/router';
 import {AuthService} from '../../../../../core/services/auth/auth-service';
 import {email} from '@angular/forms/signals';
+import {passwordsMatchValidator} from '../../../../../shared/validators/passwords-match.validator';
 
 @Component({
   selector: 'app-register',
@@ -23,9 +24,10 @@ export class Register {
     confirmPassword: ['', [Validators.minLength(8), Validators.required]]
   },
     {
-      validators: password.equals(confirmPassword)
+      validators: passwordsMatchValidator
     });
 
+  registerErrorMessage = signal('');
   isSubmitting = false;
 
   async onSubmit(){
@@ -36,6 +38,7 @@ export class Register {
       await this.router.navigate(['/verify-email']);
     }catch(error){
       console.error('Error on register', error);
+      this.showRegisterError(error as Error)
     }finally {
       this.isSubmitting = false;
     }
@@ -54,5 +57,11 @@ export class Register {
     if (c.errors['email']) return 'Email inalid';
     if (c.errors['minlength']) return `At least ${c.errors['minlength'].requiredLength} characters`;
     return 'Value not valid';
+  }
+
+  showRegisterError(error: Error) {
+    if (error.message.includes('auth/email-already-in-use')) {
+      this.registerErrorMessage.set('Email already in use.');
+    }
   }
 }

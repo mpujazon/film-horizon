@@ -23,7 +23,7 @@ export class AuthService {
         }
           return userCredential;
       }).catch((error)=>{
-        console.error(error)
+        throw new Error(error);
       });
   }
 
