@@ -65,3 +65,23 @@ export interface MediaDetail {
   credits?: MediaCreditsResponse;
   videos?: MediaVideosResponse;
 }
+
+export type MediaDetailViewModel = {
+  title: string;
+  mediaTypeLabel: string;
+  releaseYear: string;
+  runtimeLabel: string;
+  genresLabel: string;
+  ratingLabel: string;
+  voteCountLabel: string;
+  directorLabel: string;
+  overview: string;
+  topCast: MediaCastMember[];
+  trailerKey: string | null;
+  backdropUrl: string | null;
+  posterUrl: string | null;
+  status: string;
+  tagline: string | null;
+  mediaId: number;
+  mediaType: MediaDetail['media_type'];
+};
