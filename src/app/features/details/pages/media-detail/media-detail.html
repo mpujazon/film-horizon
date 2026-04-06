@@ -1,16 +1,6 @@
 <section class="detail-shell relative overflow-hidden pt-32 pb-16 md:pt-24">
   @if (viewModel(); as vm) {
     <article class="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 intro-reveal">
-      <a
-        routerLink="/"
-        class="mb-4 inline-flex items-center gap-2 rounded-full border border-white/20 bg-black/35 px-4 py-2 text-sm font-semibold text-white/95 backdrop-blur-sm transition hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white md:mb-5"
-      >
-        <svg viewBox="0 0 24 24" class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M15 6L9 12L15 18" />
-        </svg>
-        Back to Explore
-      </a>
-
       <header class="detail-hero relative overflow-hidden rounded-[2rem] border border-white/15 bg-black/55 p-6 md:p-10">
         @if (vm.backdropUrl; as backdrop) {
           <img
