@@ -90,13 +90,7 @@ export class MediaDetailPage {
 
   private getReleaseDate(detail: MediaDetail): string {
     const releaseDate = detail.release_date ?? detail.first_air_date;
-
-    if (!releaseDate) {
-      return 'TBA';
-    }
-
-    const year = Number.parseInt(releaseDate.slice(0, 4), 10);
-    return Number.isFinite(year) ? String(year) : 'TBA';
+    return releaseDate ?? 'TBA';
   }
 
   private getRuntimeLabel(detail: MediaDetail): string {
