@@ -1,11 +1,11 @@
 <section class="detail-shell relative overflow-hidden pt-32 pb-16 md:pt-24">
-  @if (hasActor()) {
+  @if (viewModel(); as vm) {
     <article class="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 intro-reveal">
       <header class="detail-hero relative overflow-hidden rounded-[2rem] border border-white/15 bg-black/55 p-6 md:p-10">
-        @if (profileUrl(); as profile) {
+        @if (vm.profileUrl; as profile) {
           <img
             [ngSrc]="profile"
-            [alt]="actorName() + ' profile image'"
+            [alt]="vm.name + ' profile image'"
             fill
             sizes="100vw"
             priority
@@ -15,12 +15,12 @@
         <div class="absolute inset-0 bg-[linear-gradient(120deg,rgba(7,9,16,0.95)_24%,rgba(7,9,16,0.74)_56%,rgba(7,9,16,0.95)_100%)]"></div>
         <div class="detail-noise absolute inset-0"></div>
 
-        <div class="relative z-10 grid gap-8 lg:grid-cols-[minmax(0,220px)_minmax(0,1fr)] lg:items-end">
+        <div class="relative z-10 grid gap-8 lg:grid-cols-[minmax(0,220px)_minmax(0,1fr)] lg:items-center">
           <div class="relative mx-auto w-full max-w-[240px] lg:mx-0">
-            @if (profileUrl(); as profile) {
+            @if (vm.profileUrl; as profile) {
               <img
                 [ngSrc]="profile"
-                [alt]="actorName()"
+                [alt]="vm.name"
                 width="460"
                 height="690"
                 class="w-full rounded-2xl border border-white/20 shadow-[0_30px_70px_-30px_rgba(0,0,0,0.9)]"
@@ -37,27 +37,17 @@
           <div class="text-white intro-reveal intro-reveal-delay-1">
             <div class="mb-4 flex flex-wrap items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em]">
               <span class="rounded-full border border-primary bg-[#0D1C4A] px-3 py-1">Actor</span>
-              <span class="rounded-full border border-white/30 bg-white/10 px-3 py-1">{{ knownForDepartment() }}</span>
-              <span class="rounded-full border border-white/30 bg-white/10 px-3 py-1">Age {{ ageLabel() }}</span>
+              <span class="rounded-full border border-white/30 bg-white/10 px-3 py-1">Age {{ vm.ageLabel }}</span>
             </div>
 
             <h1 class="text-balance font-[var(--font-display)] text-4xl leading-[1.05] md:text-6xl">
-              {{ actorName() }}
+              {{ vm.name }}
             </h1>
 
             <div class="mt-6 grid gap-3 text-sm text-white/90 sm:grid-cols-3">
-              <p><span class="block text-xs uppercase tracking-[0.12em] text-white/60">Born</span>{{ birthDateLabel() }}</p>
-              <p><span class="block text-xs uppercase tracking-[0.12em] text-white/60">Birth Place</span>{{ placeOfBirthLabel() }}</p>
-              <p><span class="block text-xs uppercase tracking-[0.12em] text-white/60">Known For</span>{{ knownForDepartment() }}</p>
-            </div>
-
-            <div class="mt-7 flex flex-wrap items-center gap-3">
-              <a
-                routerLink="/"
-                class="inline-flex h-11 items-center justify-center rounded-xl border border-white/25 bg-black/30 px-4 text-sm font-semibold text-white transition hover:bg-white/10"
-              >
-                Back to Explore
-              </a>
+              <p><span class="block text-xs uppercase tracking-[0.12em] text-white/60">Born</span>{{ vm.birthDateLabel }}</p>
+              <p><span class="block text-xs uppercase tracking-[0.12em] text-white/60">Birth Place</span>{{ vm.placeOfBirthLabel }}</p>
+              <p><span class="block text-xs uppercase tracking-[0.12em] text-white/60">Known For</span>{{ vm.knownForDepartment }}</p>
             </div>
           </div>
         </div>
@@ -67,7 +57,7 @@
         <section class="detail-panel intro-reveal intro-reveal-delay-2 rounded-3xl border border-white/12 p-6 md:p-8">
           <h2 class="font-[var(--font-display)] text-3xl text-white">Biography</h2>
           <p class="mt-4 max-w-3xl text-base leading-8 text-white/82">
-            {{ biography() }}
+            {{ vm.biography }}
           </p>
         </section>
 
@@ -76,15 +66,15 @@
           <dl class="mt-4 space-y-4 text-sm">
             <div class="flex items-baseline justify-between border-b border-white/10 pb-3">
               <dt class="text-white/65">Popularity</dt>
-              <dd class="text-xl font-semibold text-primary">{{ popularityLabel() }}</dd>
+              <dd class="text-xl font-semibold text-primary">{{ vm.popularityLabel }}</dd>
             </div>
             <div class="flex items-baseline justify-between border-b border-white/10 pb-3">
               <dt class="text-white/65">Known Credits</dt>
-              <dd class="text-lg font-semibold">{{ filmographyCount() }}</dd>
+              <dd class="text-lg font-semibold">{{ vm.filmographyCount }}</dd>
             </div>
             <div class="flex items-baseline justify-between">
               <dt class="text-white/65">Primary Department</dt>
-              <dd class="font-semibold">{{ knownForDepartment() }}</dd>
+              <dd class="font-semibold">{{ vm.knownForDepartment }}</dd>
             </div>
           </dl>
         </aside>
@@ -93,9 +83,9 @@
       <section class="mt-8 intro-reveal intro-reveal-delay-3">
         <h2 class="mb-4 font-[var(--font-display)] text-3xl text-white">Top Filmography</h2>
 
-        @if (topCredits().length > 0) {
+        @if (vm.topCredits.length > 0) {
           <div class="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-8">
-            @for (credit of topCredits(); track credit.id + '-' + credit.media_type) {
+            @for (credit of vm.topCredits; track credit.id + '-' + credit.media_type) {
               <a
                 [routerLink]="getCreditRoute(credit)"
                 class="cast-card rounded-2xl border border-white/10 bg-black/35 p-3 text-center text-white"

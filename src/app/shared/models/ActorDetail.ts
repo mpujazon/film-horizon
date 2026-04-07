@@ -27,3 +27,16 @@ export interface ActorDetail {
   popularity: number;
   combined_credits?: ActorCreditsResponse;
 }
+
+export type ActorDetailViewModel = {
+  name: string;
+  profileUrl: string | null;
+  knownForDepartment: string;
+  birthDateLabel: string;
+  ageLabel: string;
+  placeOfBirthLabel: string;
+  biography: string;
+  popularityLabel: string;
+  filmographyCount: number;
+  topCredits: ActorCredit[];
+};
