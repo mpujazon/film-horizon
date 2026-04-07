@@ -77,7 +77,7 @@ export class FeaturedCarousel {
 
       const intervalMs = Math.max(1000, this.autoplayIntervalMs());
       this.autoplayTimer = setInterval(() => {
-        this.nextStep();
+        this.advanceStepBy(1);
       }, intervalMs);
     });
 
@@ -87,25 +87,19 @@ export class FeaturedCarousel {
   }
 
   protected nextStep(): void {
-    const total = this.movies().length;
-
-    if (total <= 1) {
+    if (!this.advanceStepBy(1)) {
       return;
     }
 
-    this.currentStep.update((step) => (step + 1) % total);
+    this.restartAutoplay();
   }
 
   protected previousStep(): void {
-    const total = this.movies().length;
-
-    if (total <= 1) {
+    if (!this.advanceStepBy(-1)) {
       return;
     }
 
-    this.currentStep.update((step) =>
-      step === 0 ? total - 1 : step - 1
-    );
+    this.restartAutoplay();
   }
 
   protected goToStep(step: number): void {
@@ -113,7 +107,12 @@ export class FeaturedCarousel {
       return;
     }
 
+    if (this.normalizedStep() === step) {
+      return;
+    }
+
     this.currentStep.set(step);
+    this.restartAutoplay();
   }
 
   protected isActiveStep(step: number): boolean {
@@ -140,6 +139,34 @@ export class FeaturedCarousel {
 
     clearInterval(this.autoplayTimer);
     this.autoplayTimer = null;
+  }
+
+  private restartAutoplay(): void {
+    if (!this.autoplay() || this.movies().length <= 1) {
+      return;
+    }
+
+    this.stopAutoplay();
+
+    const intervalMs = Math.max(1000, this.autoplayIntervalMs());
+    this.autoplayTimer = setInterval(() => {
+      this.advanceStepBy(1);
+    }, intervalMs);
+  }
+
+  private advanceStepBy(offset: number): boolean {
+    const total = this.movies().length;
+
+    if (total <= 1) {
+      return false;
+    }
+
+    this.currentStep.update((step) => {
+      const nextStep = (step + offset) % total;
+      return nextStep < 0 ? nextStep + total : nextStep;
+    });
+
+    return true;
   }
 
   protected readonly API_CONFIG = API_CONFIG;
