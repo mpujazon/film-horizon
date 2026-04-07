@@ -15,7 +15,7 @@
         <div class="absolute inset-0 bg-[linear-gradient(120deg,rgba(7,9,16,0.95)_24%,rgba(7,9,16,0.74)_56%,rgba(7,9,16,0.95)_100%)]"></div>
         <div class="detail-noise absolute inset-0"></div>
 
-        <div class="relative z-10 grid gap-8 lg:grid-cols-[minmax(0,220px)_minmax(0,1fr)] lg:items-end">
+        <div class="relative z-10 grid gap-8 lg:grid-cols-[minmax(0,220px)_minmax(0,1fr)] lg:items-center">
           <div class="relative mx-auto w-full max-w-[240px] lg:mx-0">
             @if (vm.profileUrl; as profile) {
               <img
@@ -37,7 +37,6 @@
           <div class="text-white intro-reveal intro-reveal-delay-1">
             <div class="mb-4 flex flex-wrap items-center gap-2 text-xs font-semibold uppercase tracking-[0.14em]">
               <span class="rounded-full border border-primary bg-[#0D1C4A] px-3 py-1">Actor</span>
-              <span class="rounded-full border border-white/30 bg-white/10 px-3 py-1">{{ vm.knownForDepartment }}</span>
               <span class="rounded-full border border-white/30 bg-white/10 px-3 py-1">Age {{ vm.ageLabel }}</span>
             </div>
 
@@ -49,15 +48,6 @@
               <p><span class="block text-xs uppercase tracking-[0.12em] text-white/60">Born</span>{{ vm.birthDateLabel }}</p>
               <p><span class="block text-xs uppercase tracking-[0.12em] text-white/60">Birth Place</span>{{ vm.placeOfBirthLabel }}</p>
               <p><span class="block text-xs uppercase tracking-[0.12em] text-white/60">Known For</span>{{ vm.knownForDepartment }}</p>
-            </div>
-
-            <div class="mt-7 flex flex-wrap items-center gap-3">
-              <a
-                routerLink="/"
-                class="inline-flex h-11 items-center justify-center rounded-xl border border-white/25 bg-black/30 px-4 text-sm font-semibold text-white transition hover:bg-white/10"
-              >
-                Back to Explore
-              </a>
             </div>
           </div>
         </div>
