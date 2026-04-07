@@ -4,7 +4,12 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { map } from 'rxjs';
 import { API_CONFIG } from '../../../../core/config/api.config';
-import { MediaCastMember, MediaCrewMember, MediaDetail } from '../../../../shared/models/MediaDetail';
+import {
+  MediaCastMember,
+  MediaCrewMember,
+  MediaDetail,
+  MediaDetailViewModel
+} from '../../../../shared/models/MediaDetail';
 import { TrailerModal } from '../../../../shared/components/trailer-modal/trailer-modal';
 import { WatchlistButton } from '../../../../shared/components/watchlist-button/watchlist-button';
 
@@ -25,28 +30,70 @@ export class MediaDetailPage {
     { initialValue: null }
   );
 
-  protected readonly hasMedia = computed(() => this.media() !== null);
-  protected readonly title = computed(() => this.media()?.title ?? this.media()?.name ?? 'Unknown title');
-  protected readonly mediaTypeLabel = computed(() =>
-    this.media()?.media_type === 'tv' ? 'TV Series' : 'Movie'
-  );
-  protected readonly releaseYear = computed(() => {
-    const releaseDate = this.media()?.release_date ?? this.media()?.first_air_date;
-
-    if (!releaseDate) {
-      return 'TBA';
-    }
-
-    const year = Number.parseInt(releaseDate.slice(0, 4), 10);
-    return Number.isFinite(year) ? String(year) : 'TBA';
-  });
-  protected readonly runtimeLabel = computed(() => {
+  protected readonly viewModel = computed<MediaDetailViewModel | null>(() => {
     const detail = this.media();
 
     if (!detail) {
-      return 'Runtime unavailable';
+      return null;
     }
 
+    return {
+      title: detail.title ?? detail.name ?? 'Unknown title',
+      mediaTypeLabel: detail.media_type === 'tv' ? 'TV Series' : 'Movie',
+      releaseYear: this.getReleaseDate(detail),
+      runtimeLabel: this.getRuntimeLabel(detail),
+      genresLabel: this.getGenresLabel(detail),
+      ratingLabel: this.getRatingLabel(detail),
+      voteCountLabel: this.getVoteCountLabel(detail),
+      directorLabel: this.getDirectorLabel(detail),
+      overview: detail.overview || 'No synopsis is available for this title yet.',
+      topCast: (detail.credits?.cast ?? []).slice(0, 8),
+      trailerKey: this.getTrailerKey(detail),
+      backdropUrl: this.getImageUrl(detail.backdrop_path, 'w1280'),
+      posterUrl: this.getImageUrl(detail.poster_path, 'w780'),
+      status: detail.status,
+      tagline: detail.tagline ?? null,
+      mediaId: detail.id,
+      mediaType: detail.media_type
+    };
+  });
+
+  protected readonly isTrailerModalOpen = signal(false);
+
+  constructor() {
+    effect(() => {
+      if (this.viewModel()) {
+        this.viewportScroller.scrollToPosition([0, 0]);
+      }
+    });
+  }
+
+  protected getProfileUrl(castMember: MediaCastMember): string {
+    return castMember.profile_path ? `${this.imageBaseUrl}/w185${castMember.profile_path}` : '';
+  }
+
+  protected openTrailerModal(): void {
+    if (!this.viewModel()?.trailerKey) {
+      return;
+    }
+
+    this.isTrailerModalOpen.set(true);
+  }
+
+  protected closeTrailerModal(): void {
+    this.isTrailerModalOpen.set(false);
+  }
+
+  private findCrewByJob(crew: MediaCrewMember[], job: string): MediaCrewMember | null {
+    return crew.find((member) => member.job === job) ?? null;
+  }
+
+  private getReleaseDate(detail: MediaDetail): string {
+    const releaseDate = detail.release_date ?? detail.first_air_date;
+    return releaseDate ?? 'TBA';
+  }
+
+  private getRuntimeLabel(detail: MediaDetail): string {
     if (detail.media_type === 'tv') {
       const minutes = detail.episode_run_time?.find((value) => value > 0);
       if (!minutes) {
@@ -63,26 +110,21 @@ export class MediaDetailPage {
     const hours = Math.floor(detail.runtime / 60);
     const minutes = detail.runtime % 60;
     return hours > 0 ? `${hours}h ${minutes}m` : `${minutes}m`;
-  });
-  protected readonly genresLabel = computed(() => {
-    const genres = this.media()?.genres ?? [];
-    return genres.length > 0 ? genres.map((genre) => genre.name).join(' · ') : 'Genre not listed';
-  });
-  protected readonly ratingLabel = computed(() => {
-    const rating = this.media()?.vote_average;
-    return typeof rating === 'number' ? rating.toFixed(1) : 'N/A';
-  });
-  protected readonly voteCountLabel = computed(() => {
-    const voteCount = this.media()?.vote_count;
-    return typeof voteCount === 'number' ? voteCount.toLocaleString() : '0';
-  });
-  protected readonly directorLabel = computed(() => {
-    const detail = this.media();
+  }
 
-    if (!detail) {
-      return 'Not available';
-    }
+  private getGenresLabel(detail: MediaDetail): string {
+    return detail.genres.length > 0 ? detail.genres.map((genre) => genre.name).join(' · ') : 'Genre not listed';
+  }
 
+  private getRatingLabel(detail: MediaDetail): string {
+    return typeof detail.vote_average === 'number' ? detail.vote_average.toFixed(1) : 'N/A';
+  }
+
+  private getVoteCountLabel(detail: MediaDetail): string {
+    return typeof detail.vote_count === 'number' ? detail.vote_count.toLocaleString() : '0';
+  }
+
+  private getDirectorLabel(detail: MediaDetail): string {
     if (detail.media_type === 'movie') {
       const director = this.findCrewByJob(detail.credits?.crew ?? [], 'Director');
       return director?.name ?? 'Not available';
@@ -95,55 +137,19 @@ export class MediaDetailPage {
 
     const showrunner = this.findCrewByJob(detail.credits?.crew ?? [], 'Executive Producer');
     return showrunner?.name ?? 'Not available';
-  });
-  protected readonly overview = computed(
-    () => this.media()?.overview || 'No synopsis is available for this title yet.'
-  );
-  protected readonly topCast = computed(() => (this.media()?.credits?.cast ?? []).slice(0, 8));
-  protected readonly isTrailerModalOpen = signal(false);
-  protected readonly trailerKey = computed(() => {
-    const videos = this.media()?.videos?.results ?? [];
+  }
+
+  private getTrailerKey(detail: MediaDetail): string | null {
+    const videos = detail.videos?.results ?? [];
     const trailer =
       videos.find((video) => video.site === 'YouTube' && video.type === 'Trailer' && video.official) ??
       videos.find((video) => video.site === 'YouTube' && video.type === 'Trailer') ??
       null;
 
     return trailer?.key ?? null;
-  });
-  protected readonly backdropUrl = computed(() => {
-    const backdropPath = this.media()?.backdrop_path;
-    return backdropPath ? `${this.imageBaseUrl}/w1280${backdropPath}` : null;
-  });
-  protected readonly posterUrl = computed(() => {
-    const posterPath = this.media()?.poster_path;
-    return posterPath ? `${this.imageBaseUrl}/w780${posterPath}` : null;
-  });
-
-  constructor() {
-    effect(() => {
-      if (this.media()) {
-        this.viewportScroller.scrollToPosition([0, 0]);
-      }
-    });
   }
 
-  protected getProfileUrl(castMember: MediaCastMember): string {
-    return castMember.profile_path ? `${this.imageBaseUrl}/w185${castMember.profile_path}` : '';
-  }
-
-  protected openTrailerModal(): void {
-    if (!this.trailerKey()) {
-      return;
-    }
-
-    this.isTrailerModalOpen.set(true);
-  }
-
-  protected closeTrailerModal(): void {
-    this.isTrailerModalOpen.set(false);
-  }
-
-  private findCrewByJob(crew: MediaCrewMember[], job: string): MediaCrewMember | null {
-    return crew.find((member) => member.job === job) ?? null;
+  private getImageUrl(path: string | null | undefined, size: 'w1280' | 'w780'): string | null {
+    return path ? `${this.imageBaseUrl}/${size}${path}` : null;
   }
 }

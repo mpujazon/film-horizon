@@ -40,20 +40,19 @@ export class MovieCard {
   readonly isTrailerModalOpen = signal(false);
   readonly trailerKey = signal<string | null>(null);
 
-  readonly title = computed(() => this.movie().title || this.movie().name || 'Untitled');
-  readonly movieDetailUrl = computed(() => {
-    const mediaTypePath = this.movie().media_type === 'tv' ? 'tv' : 'movie';
-    return `/${mediaTypePath}/${this.movie().id}`;
-  });
-  readonly formattedRating = computed(() => this.movie().vote_average.toFixed(1));
-  readonly releaseYear = computed(() => {
-    const releaseDate = this.movie().release_date || this.movie().first_air_date;
-    return releaseDate ? releaseDate.split('-')[0] : 'TBA';
-  });
-  readonly mediaType = computed(() => this.movie().media_type.toUpperCase());
-  readonly posterUrl = computed(() => {
-    const posterPath = this.movie().poster_path;
-    return posterPath === null ? '' : `${API_CONFIG.tmdbImageBaseUrl}/w780${posterPath}`;
+  readonly movieMeta = computed(() => {
+    const movie = this.movie();
+    const releaseDate = movie.release_date || movie.first_air_date;
+    const mediaTypePath = movie.media_type === 'tv' ? 'tv' : 'movie';
+
+    return {
+      title: movie.title || movie.name || 'Untitled',
+      movieDetailUrl: `/${mediaTypePath}/${movie.id}`,
+      formattedRating: movie.vote_average.toFixed(1),
+      releaseYear: releaseDate ? releaseDate.split('-')[0] : 'TBA',
+      mediaType: movie.media_type.toUpperCase(),
+      posterUrl: movie.poster_path === null ? '' : `${API_CONFIG.tmdbImageBaseUrl}/w780${movie.poster_path}`
+    };
   });
 
   constructor() {
@@ -65,6 +64,30 @@ export class MovieCard {
 
   onImageError(): void {
     this.imageLoadFailed.set(true);
+  }
+
+  title(): string {
+    return this.movieMeta().title;
+  }
+
+  movieDetailUrl(): string {
+    return this.movieMeta().movieDetailUrl;
+  }
+
+  formattedRating(): string {
+    return this.movieMeta().formattedRating;
+  }
+
+  releaseYear(): string {
+    return this.movieMeta().releaseYear;
+  }
+
+  mediaType(): string {
+    return this.movieMeta().mediaType;
+  }
+
+  posterUrl(): string {
+    return this.movieMeta().posterUrl;
   }
 
   onTrailerClick(): void {

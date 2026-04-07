@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import {ChangeDetectionStrategy, Component, computed, inject, OnInit, signal} from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { catchError, firstValueFrom, forkJoin, map, of } from 'rxjs';
 import { TmdbService } from '../../../../core/services/tmdb/tmdb-service';
@@ -14,7 +14,7 @@ import { WatchlistChangeEvent } from '../../../../shared/components/watchlist-bu
   templateUrl: './watchlist-page.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class WatchlistPage {
+export class WatchlistPage implements OnInit{
   private readonly watchlistService = inject(WatchlistService);
   private readonly tmdbService = inject(TmdbService);
 

@@ -4,7 +4,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { map } from 'rxjs';
 import { API_CONFIG } from '../../../../core/config/api.config';
-import { ActorCredit, ActorDetail } from '../../../../shared/models/ActorDetail';
+import { ActorCredit, ActorDetail, ActorDetailViewModel } from '../../../../shared/models/ActorDetail';
 
 @Component({
   selector: 'app-actor-detail',
@@ -24,34 +24,33 @@ export class ActorDetailPage {
     { initialValue: null }
   );
 
-  protected readonly hasActor = computed(() => this.actor() !== null);
-  protected readonly actorName = computed(() => this.actor()?.name ?? 'Unknown actor');
-  protected readonly profileUrl = computed(() => {
-    const profilePath = this.actor()?.profile_path;
-    return profilePath ? `${this.imageBaseUrl}/w780${profilePath}` : null;
+  protected readonly viewModel = computed<ActorDetailViewModel | null>(() => {
+    const actor = this.actor();
+
+    if (!actor) {
+      return null;
+    }
+
+    return {
+      name: actor.name ?? 'Unknown actor',
+      profileUrl: actor.profile_path ? `${this.imageBaseUrl}/w780${actor.profile_path}` : null,
+      knownForDepartment: actor.known_for_department ?? 'Performer',
+      birthDateLabel: this.formatDate(actor.birthday),
+      ageLabel: this.getAgeLabel(actor.birthday, actor.deathday),
+      placeOfBirthLabel: actor.place_of_birth ?? 'Not available',
+      biography: actor.biography?.trim() || 'No biography is available for this actor yet.',
+      popularityLabel: actor.popularity.toFixed(1) || 'N/A',
+      filmographyCount: (actor.combined_credits?.cast ?? []).length,
+      topCredits: [...(actor.combined_credits?.cast ?? [])]
+        .filter((credit) => credit.media_type === 'movie' || credit.media_type === 'tv')
+        .sort((a, b) => (b.popularity ?? 0) - (a.popularity ?? 0))
+        .slice(0, 8)
+    };
   });
-  protected readonly knownForDepartment = computed(() => this.actor()?.known_for_department ?? 'Performer');
-  protected readonly birthDateLabel = computed(() => this.formatDate(this.actor()?.birthday));
-  protected readonly ageLabel = computed(() => this.getAgeLabel(this.actor()?.birthday, this.actor()?.deathday));
-  protected readonly placeOfBirthLabel = computed(() => this.actor()?.place_of_birth ?? 'Not available');
-  protected readonly biography = computed(
-    () => this.actor()?.biography?.trim() || 'No biography is available for this actor yet.'
-  );
-  protected readonly popularityLabel = computed(() => {
-    const popularity = this.actor()?.popularity;
-    return typeof popularity === 'number' ? popularity.toFixed(1) : 'N/A';
-  });
-  protected readonly filmographyCount = computed(() => (this.actor()?.combined_credits?.cast ?? []).length);
-  protected readonly topCredits = computed(() =>
-    [...(this.actor()?.combined_credits?.cast ?? [])]
-      .filter((credit) => credit.media_type === 'movie' || credit.media_type === 'tv')
-      .sort((a, b) => (b.popularity ?? 0) - (a.popularity ?? 0))
-      .slice(0, 8)
-  );
 
   constructor() {
     effect(() => {
-      if (this.actor()) {
+      if (this.viewModel()) {
         this.viewportScroller.scrollToPosition([0, 0]);
       }
     });
