@@ -1,110 +1,81 @@
 # FilmHorizon
 
-FilmHorizon is a private movie-tracking SPA where users can discover movies and manage personal favorites and ratings.
+FilmHorizon is an Angular 21 SPA to discover movies and TV shows from TMDB, authenticate users with Firebase, and store each user's personal watchlist.
 
-## Context
+## Implemented Features
 
-Users need a simple, visual, and persistent way to save movie preferences. This project focuses on fast task completion:
-
-- Search and explore movies.
-- Open detailed movie, actor, and director views.
-- Sign in and persist favorites and ratings (1-10).
-
-## MVP Scope
-
-### In scope (v1)
-
-- Media exploration with search and filters.
-- Media detail page (synopsis, cast, director, release date, trailer if available).
-- Actor and director detail pages.
-- User authentication (register/login).
-- Favorites management and personal ratings.
-- Protected user areas (`/favorites`, `/profile`).
-
-### Out of scope (v1)
-
-- Social sharing.
-- Public comments/reviews.
-- Advanced recommendation engine.
+- Authentication with email/password: register, login, logout.
+- Email verification flow (`/verify-email`) before entering protected app routes.
+- Home page with featured trending content and explore feed.
+- Search with:
+  - live autocomplete suggestions
+  - full results page
+  - filters (genre, score, year, trending only)
+- Detail pages for:
+  - movies and TV (`/movie/:id`, `/tv/:id`)
+  - actors (`/actor/:id`)
+- Watchlist management (add/remove) persisted per authenticated user in Firestore.
 
 ## Tech Stack
 
-- Angular 21 (standalone-first architecture).
-- Tailwind CSS (mobile-first, accessible UI, chosen to accelerate delivery).
-- TMDB API for movie/person/credits data.
-- Firebase for authentication and user-specific persistence.
-- Vercel for deployment.
+- Angular 21 (standalone architecture, signals).
+- Tailwind CSS.
+- TMDB API.
+- Firebase Auth + Firestore.
 
-## Route Map (v1)
+## Routing
 
-- Public: `/`, `/explore`, `/movie/:id`, `/actor/:id`, `/director/:id`, `/login`, `/register`
-- Auth-only: `/favorites`, `/profile`
-- Fallback: `*` -> 404
+Public:
 
-## Non-Functional Targets
+- `/login`
+- `/register`
+- `/verify-email`
 
-- Performance: fast interactive experience on mid-range mobile.
-- Accessibility: WCAG 2.2 AA-oriented checks on core flows.
-- Security: favorites/ratings are private per authenticated user.
-- Maintainability: feature-based architecture and testable modules.
+Protected (authenticated + verified email):
 
-## Quick Start
+- `/`
+- `/search`
+- `/movie/:id`
+- `/tv/:id`
+- `/actor/:id`
+- `/watchlist`
+
+Fallback:
+
+- `**` redirects to `/`
+
+## Setup (Angular CLI Preferred)
 
 ### Prerequisites
 
 - Node.js LTS
 - Angular CLI 21+
 
-### Install and run
+Install Angular CLI globally if needed:
 
 ```bash
-npm install
+pnpm install -g @angular/cli
+```
+
+### Install dependencies
+
+```bash
+pnpm install
+```
+
+### Run development server
+
+```bash
 ng serve
 ```
 
 Open `http://localhost:4200/`.
 
-## Scripts
+## CLI Commands
 
 ```bash
-ng serve      # start development server
-ng build      # production build
-ng test       # run unit tests
-ng e2e        # run end-to-end tests (when configured)
+ng serve                         # start dev server
+ng build                         # production build (runs env generation first)
+ng test                          # unit tests
+ng test --coverage --watch=false # unit tests with coverage
 ```
-
-## Quality and Testing Strategy
-
-- Unit tests for core logic (filters, mappers, auth helpers).
-- Component tests for explore, detail, and favorite/rating flows.
-- E2E happy paths:
-  - Search -> detail
-  - Register/login
-  - Add/remove favorite and rate
-- Gherkin scenarios aligned with acceptance criteria.
-
-## Risks and Mitigation
-
-- TMDB limits/data gaps: caching, retries, and robust empty/error states.
-- Scope creep: freeze v1 scope and push extras to backlog.
-- Auth complexity: validate integration early.
-- Accessibility debt: include a11y checks during implementation, not at the end.
-
-## Delivery Plan
-
-- Sprint 1: project setup, routing, base layout, TMDB spike.
-- Sprint 2: exploration + filtering + movie detail.
-- Sprint 3: actor/director details + auth.
-- Sprint 4: favorites + ratings + persistence.
-- Sprint 5: testing, accessibility/performance pass, deployment.
-
-## Definition of Done
-
-A feature is complete only when:
-
-- Acceptance criteria pass.
-- Relevant tests are implemented and passing.
-- Loading, error, and empty states are present.
-- Accessibility checks are completed for affected flows.
-- Code is reviewed and documented.
-- Feature is deployed and smoke-tested.
