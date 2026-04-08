@@ -16,6 +16,10 @@ export class Login {
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
   readonly formBuilder = inject(FormBuilder);
+  private readonly demoCredentials = {
+    email: 'krfsqhiwifqfdzokop@nespj.com',
+    password: '12345678'
+  };
 
   loginForm = this.formBuilder.nonNullable.group({
     email: ['', [Validators.email, Validators.required]],
@@ -31,6 +35,19 @@ export class Login {
     try{
       const {email, password} = this.loginForm.getRawValue();
       await this.authService.login(email,password);
+      await this.router.navigate(['']);
+    }catch(error){
+      this.showLoginError(error as Error);
+    }finally {
+      this.isSubmitting = false;
+    }
+  }
+
+  async onDemoLogin(){
+    this.loginErrorMessage.set('');
+    this.isSubmitting = true;
+    try{
+      await this.authService.login(this.demoCredentials.email, this.demoCredentials.password);
       await this.router.navigate(['']);
     }catch(error){
       this.showLoginError(error as Error);
